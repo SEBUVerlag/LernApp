@@ -322,41 +322,80 @@
     <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
   </section>
 
-   <!-- Fall 3 -->
-  <section id="case3" style="display:none;">
-    <div class="case-box">
-      <h3>Übung: Grundlagen des § 1 Abs. 2 StVO</h3>
-      <p><strong>Aufgabe:</strong> Beantworten Sie die nachfolgenden Fragen.</p>
-    </div>
+ <!-- Fall 3 -->
+<section id="case3" style="display:none;">
+  <div class="case-box">
+    <h3>Übung: Grundlagen des § 1 Abs. 2 StVO</h3>
+    <p><strong>Aufgabe:</strong> Beantworten Sie die nachfolgenden Fragen.</p>
+  </div>
 
-    <div class="question" id="q3_1">
-      <h3>1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">Belästigung</button>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">Behinderung</button>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">Gefährdung</button>
-      <button class="answer-btn" onclick="checkAnswer(this, true)">Schädigung</button>
-      <div class="feedback"></div>
-    </div>
+  <div class="question" id="q3_1">
+    <h3>1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Belästigung</button>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Behinderung</button>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Gefährdung</button>
+    <button class="answer-btn" onclick="checkAnswer(this, true)">Schädigung</button>
+    <div class="feedback"></div>
+  </div>
 
-    <div class="question" id="q3_2">
-     <h3>2. Wann wird § 1 Abs. 2 StVO als Auffangtatbestand angewandt?</h3>
-     <button class="answer-btn" onclick="checkAnswer(this, false)">Wenn rechtlicher Überhang besteht</button>
-     <button class="answer-btn" onclick="checkAnswer(this, true)">Wenn keine Spezialnorm existiert</button>
-     <button class="answer-btn" onclick="checkAnswer(this, false)">Wenn die Spezialnorm nicht einschlägig ist</button>
-     <div class="feedback"></div>
-   </div>
+  <div class="question" id="q3_2">
+    <h3>2. Wann wird § 1 Abs. 2 StVO als Auffangtatbestand angewandt?</h3>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Wenn rechtlicher Überhang besteht</button>
+    <button class="answer-btn" onclick="checkAnswer(this, true)">Wenn keine Spezialnorm existiert</button>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Wenn die Spezialnorm nicht einschlägig ist</button>
+    <div class="feedback"></div>
+  </div>
 
-    <div class="question" id="q3_3">
-      <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
-      <button class="answer-btn" onclick="checkAnswer(this, true)">Eine Behinderung</button>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">Rechtlichen Überhang</button>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">Eine Bezugsnorm</button>
-      <div class="feedback"></div>
-    </div>
+  <div class="question" id="q3_3">
+    <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
+    <button class="answer-btn" onclick="checkAnswer(this, true)">Eine Behinderung</button>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Rechtlichen Überhang</button>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">Eine Bezugsnorm</button>
+    <div class="feedback"></div>
+  </div>
 
-    <div id="summary3" class="summary"></div>
-    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
-  </section>
+  <div id="summary3" class="summary"></div>
+  <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+</section>
+
+<script>
+function checkAnswer(btn, isCorrect){
+  const question = btn.parentElement;
+  const buttons = question.querySelectorAll('.answer-btn');
+  const feedback = question.querySelector('.feedback');
+
+  // Verhindere mehrfaches Klicken
+  if([...buttons].some(b=>b.disabled)) return;
+
+  // Alle Buttons deaktivieren
+  buttons.forEach(b=>b.disabled=true);
+
+  if(isCorrect){
+    btn.classList.add('correct');
+    feedback.textContent='✅ Richtig!';
+    question.dataset.answeredCorrect="true";
+  } else {
+    btn.classList.add('incorrect');
+    feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
+    // Richtig markieren
+    buttons.forEach(b=>{
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
+    });
+    question.dataset.answeredCorrect="false";
+  }
+
+  updateSummary(question.closest('section'));
+}
+
+function updateSummary(section){
+  const questions = section.querySelectorAll('.question');
+  let correctCount = 0;
+  questions.forEach(q=>{
+    if(q.dataset.answeredCorrect === "true") correctCount++;
+  });
+  section.querySelector('.summary').textContent=`Du hast ${correctCount} von ${questions.length} Fragen richtig beantwortet.`;
+}
+</script>
 
   <div class="footer-note">
     © SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS
