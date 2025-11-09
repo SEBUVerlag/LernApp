@@ -32,7 +32,7 @@
   .back-btn { margin-top: 2rem; background: #823125; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer; }
   .back-btn:hover { background: #a23d2f; }
 
-  /* Hinweis-Box unten über dem Footer, schwebend */
+ /* Hinweis-Box am unteren Ende der Startseite */
 .app-hint {
   font-size: 0.85rem;           /* kleinerer Text */
   color: #333;
@@ -43,13 +43,9 @@
   max-width: 700px;
   line-height: 1.3;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  
-  position: fixed;              /* fixiert am Bildschirm */
-  bottom: 60px;                 /* Abstand vom unteren Rand (über Footer) */
-  left: 50%;                    /* zentriert */
-  transform: translateX(-50%);
-  z-index: 1000;                /* über anderen Inhalten */
+
   text-align: center;
+  margin: 2rem auto 1rem auto;  /* Abstand oben/unten, zentriert */
 }
 </style>
 </head>
@@ -279,6 +275,7 @@
 
   <!-- Hinweis-Box auf Startseite -->
 <div class="app-hint">
+  <p><strong>Installation der Lern-App:</strongt></strong></p>
   <p><strong>iOS:</strong> Tippe auf das Teilen-Symbol ⬆︎ und wähle „Zum Home-Bildschirm“.</p>
   <p><strong>Android:</strong> Tippe auf die drei Punkte ⋮ und wähle „Zum Startbildschirm hinzufügen“.</p>
 </div>
