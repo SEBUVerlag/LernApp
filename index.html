@@ -150,6 +150,155 @@
     <button onclick="openCase('case3')">Übung: Grundlagen des § 1 Abs. 2 StVO</button>
   </div>
 
+ <!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SEBU Lern-App - Übung Definitionen/Auslegungen</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #f6f6f6;
+    color: #222;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #823125;
+    color: white;
+    text-align: center;
+    padding: 1.2rem;
+  }
+  h1 {
+    margin: 0.2em 0 0.1em;
+    font-size: 1.4rem;
+  }
+  h2 {
+    margin: 0;
+    font-weight: normal;
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+  main {
+    max-width: 700px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    padding: 2rem;
+  }
+
+  .start-page button {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #823125;
+    background: #fff8f6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .start-page button:hover {
+    background: #f0e5e2;
+  }
+
+  .case-box {
+    background: #fff8f6;
+    border-left: 6px solid #823125;
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+  .case-box h3 {
+    margin-top: 0;
+    color: #823125;
+  }
+
+  .question {
+    margin-bottom: 2rem;
+  }
+  .question h3 {
+    margin-bottom: 0.6rem;
+  }
+  button.answer-btn {
+    display: block;
+    margin-top: 0.5rem;
+    background: #eaeaea;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  button.answer-btn:hover {
+    background: #f0f0f0;
+  }
+  button.correct {
+    background: #c8e6c9;
+    border-color: #388e3c;
+    color: #2e7d32;
+  }
+  button.incorrect {
+    background: #ffcdd2;
+    border-color: #c62828;
+    color: #b71c1c;
+  }
+  .feedback {
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+  }
+  .correct-answer {
+    background-color: #d4edda !important;
+    border-radius: 6px;
+    padding: 2px 6px;
+  }
+  .summary {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #823125;
+  }
+  .footer-note {
+    text-align: center;
+    font-size: 0.8rem;
+    margin-top: 2rem;
+    color: #666;
+  }
+  .back-btn {
+    margin-top: 2rem;
+    background: #823125;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .back-btn:hover {
+    background: #a23d2f;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SEBU Lern-App – Übung Definitionen/Auslegungen</h1>
+  <h2>Dipl.-Verww. (FH) PHK Sebastian Burbach, M.A.</h2>
+</header>
+
+<main>
+  <!-- Startseite -->
+  <div id="startPage" class="start-page">
+    <button onclick="openCase('case0')">Übung: Definitionen/Auslegungen</button>
+  </div>
+
   <!-- Fall 0 -->
   <section id="case0" style="display:none;">
     <div class="case-box">
@@ -185,6 +334,96 @@
     <div id="summary0" class="summary"></div>
     <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
   </section>
+
+  <div class="footer-note">
+    © SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS
+  </div>
+</main>
+
+<script>
+function openCase(id){
+  document.getElementById('startPage').style.display='none';
+  document.querySelectorAll('section').forEach(s => s.style.display='none');
+  const section = document.getElementById(id);
+  if(section) section.style.display='block';
+}
+
+function backToStart(){
+  document.querySelectorAll('section').forEach(s => s.style.display='none');
+  document.getElementById('startPage').style.display='block';
+}
+
+function checkAnswer(btn,isCorrect){
+  const question = btn.parentElement;
+  const buttons = question.querySelectorAll('.answer-btn');
+  const feedback = question.querySelector('.feedback');
+
+  if([...buttons].some(b=>b.disabled)) return;
+
+  buttons.forEach(b=>b.disabled=true);
+
+  if(isCorrect){
+    btn.classList.add('correct');
+    feedback.textContent='✅ Richtig!';
+    question.dataset.answeredCorrect="true";
+  } else {
+    btn.classList.add('incorrect');
+    feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
+    buttons.forEach(b=>{
+      if(b.onclick.toString().includes('true')) b.classList.add('correct-answer');
+    });
+    question.dataset.answeredCorrect="false";
+  }
+  updateSummary(question.closest('section'));
+}
+
+// Strenge Multi-Answer-Logik
+function checkAnswerMulti(btn,isCorrect){
+  const question = btn.parentElement;
+  const feedback = question.querySelector('.feedback');
+  const buttons = question.querySelectorAll('.answer-btn');
+
+  if(btn.disabled) return;
+  btn.disabled = true;
+
+  if(isCorrect){
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('incorrect');
+    feedback.textContent = "❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.";
+    buttons.forEach(b=>b.disabled=true);
+    buttons.forEach(b=>{
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
+    });
+    question.dataset.answeredCorrect="false";
+    updateSummary(question.closest('section'));
+    return;
+  }
+
+  // Prüfen, ob alle richtigen Antworten angeklickt wurden
+  const totalTrue = Array.from(buttons).filter(b=>b.getAttribute('onclick').includes('true')).length;
+  const correctClicks = Array.from(buttons).filter(b=>b.classList.contains('correct')).length;
+
+  if(correctClicks === totalTrue){
+    feedback.textContent = "✅ Alle Antworten korrekt!";
+    question.dataset.answeredCorrect="true";
+    buttons.forEach(b=>b.disabled=true);
+    updateSummary(question.closest('section'));
+  }
+}
+
+function updateSummary(section){
+  const questions = section.querySelectorAll('.question');
+  let correctCount = 0;
+  questions.forEach(q=>{
+    if(q.dataset.answeredCorrect === "true") correctCount++;
+  });
+  section.querySelector('.summary').textContent=`Du hast ${correctCount} von ${questions.length} Fragen richtig beantwortet.`;
+}
+</script>
+
+</body>
+</html>
 
   <!-- Fall 1 -->
   <section id="case1" style="display:none;">
