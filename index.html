@@ -299,60 +299,43 @@
     <button onclick="openCase('case0')">Übung: Definitionen/Auslegungen</button>
   </div>
 
-  <!-- Fall 0 -->
-  <section id="case0" style="display:none;">
-    <div class="case-box">
-      <h3>Übung: Definitionen/Auslegungen</h3>
-      <p><strong>Aufgabe:</strong> Ordne die Definitionen/Auslegungen, Inhalte und Rechtsgrundlagen korrekt zu.</p>
-    </div>
-
-    <div class="question" id="q0_1">
-      <h3>1. Wo steht die Legaldefinition des Begriffs „Fahrstreifen“?</h3>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">§ 2 Abs. 1 S. 2 StVO</button>
-      <button class="answer-btn" onclick="checkAnswer(this, true)">§ 7 Abs. 1 S. 2 StVO</button>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">VwV zu § 2 StVO</button>
-      <div class="feedback"></div>
-    </div>
-
-    <div class="question" id="q0_2" data-multi="true">
-      <h3>2. Welche Merkmale machen eine Fahrbahn aus? (zwei richtige Antworten)</h3>
-      <button class="answer-btn" onclick="checkAnswerMulti(this, true)">Sie muss geeignet sein</button>
-      <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Sie muss für jedermann tatsächlich zur Verfügung stehen</button>
-      <button class="answer-btn" onclick="checkAnswerMulti(this, true)">Sie muss freigegeben sein</button>
-      <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Sie muss Fahrbahnmarkierungen haben</button>
-      <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Sie darf nur mit Kraftfahrzeugen befahren werden</button>
-      <div class="feedback"></div>
-    </div>
-
-    <div class="question" id="q0_3">
-      <h3>3. Zu welchem Teilbereich des öffentlichen Verkehrsraums gehört die wegerechtliche Widmung?</h3>
-      <button class="answer-btn" onclick="checkAnswer(this, false)">öffentlich-tatsächlicher Verkehrsraum</button>
-      <button class="answer-btn" onclick="checkAnswer(this, true)">öffentlich-rechtlicher Verkehrsraum</button>
-      <div class="feedback"></div>
-    </div>
-
-    <div id="summary0" class="summary"></div>
-    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
-  </section>
-
-  <div class="footer-note">
-    © SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS
+<!-- Fall 0 -->
+<section id="case0" style="display:none;">
+  <div class="case-box">
+    <h3>Übung: Definitionen/Auslegungen</h3>
+    <p><strong>Aufgabe:</strong> Ordne die Definitionen/Auslegungen, Inhalte und Rechtsgrundlagen korrekt zu.</p>
   </div>
-</main>
+
+  <div class="question" id="q0_1">
+    <h3>1. Wo steht die Legaldefinition des Begriffs „Fahrstreifen“?</h3>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">§ 2 Abs. 1 S. 2 StVO</button>
+    <button class="answer-btn" onclick="checkAnswer(this, true)">§ 7 Abs. 1 S. 2 StVO</button>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">VwV zu § 2 StVO</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question" id="q0_2" data-multi="true">
+    <h3>2. Welche Merkmale machen eine Fahrbahn aus? (zwei richtige Antworten)</h3>
+    <button class="answer-btn" onclick="checkAnswerMulti(this, true)">Sie muss geeignet sein</button>
+    <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Sie muss für jedermann tatsächlich zur Verfügung stehen</button>
+    <button class="answer-btn" onclick="checkAnswerMulti(this, true)">Sie muss freigegeben sein</button>
+    <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Sie muss Fahrbahnmarkierungen haben</button>
+    <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Sie darf nur mit Kraftfahrzeugen befahren werden</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question" id="q0_3">
+    <h3>3. Zu welchem Teilbereich des öffentlichen Verkehrsraums gehört die wegerechtliche Widmung?</h3>
+    <button class="answer-btn" onclick="checkAnswer(this, false)">öffentlich-tatsächlicher Verkehrsraum</button>
+    <button class="answer-btn" onclick="checkAnswer(this, true)">öffentlich-rechtlicher Verkehrsraum</button>
+    <div class="feedback"></div>
+  </div>
+
+  <div id="summary0" class="summary"></div>
+  <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+</section>
 
 <script>
-function openCase(id){
-  document.getElementById('startPage').style.display='none';
-  document.querySelectorAll('section').forEach(s => s.style.display='none');
-  const section = document.getElementById(id);
-  if(section) section.style.display='block';
-}
-
-function backToStart(){
-  document.querySelectorAll('section').forEach(s => s.style.display='none');
-  document.getElementById('startPage').style.display='block';
-}
-
 function checkAnswer(btn,isCorrect){
   const question = btn.parentElement;
   const buttons = question.querySelectorAll('.answer-btn');
@@ -370,14 +353,13 @@ function checkAnswer(btn,isCorrect){
     btn.classList.add('incorrect');
     feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
     buttons.forEach(b=>{
-      if(b.onclick.toString().includes('true')) b.classList.add('correct-answer');
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
     });
     question.dataset.answeredCorrect="false";
   }
   updateSummary(question.closest('section'));
 }
 
-// Strenge Multi-Answer-Logik
 function checkAnswerMulti(btn,isCorrect){
   const question = btn.parentElement;
   const feedback = question.querySelector('.feedback');
@@ -386,9 +368,8 @@ function checkAnswerMulti(btn,isCorrect){
   if(btn.disabled) return;
   btn.disabled = true;
 
-  if(isCorrect){
-    btn.classList.add('correct');
-  } else {
+  // Wenn falsche Antwort → sofort falsch markieren
+  if(!isCorrect){
     btn.classList.add('incorrect');
     feedback.textContent = "❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.";
     buttons.forEach(b=>b.disabled=true);
@@ -399,6 +380,9 @@ function checkAnswerMulti(btn,isCorrect){
     updateSummary(question.closest('section'));
     return;
   }
+
+  // Richtige Antwort
+  btn.classList.add('correct');
 
   // Prüfen, ob alle richtigen Antworten angeklickt wurden
   const totalTrue = Array.from(buttons).filter(b=>b.getAttribute('onclick').includes('true')).length;
@@ -421,9 +405,6 @@ function updateSummary(section){
   section.querySelector('.summary').textContent=`Du hast ${correctCount} von ${questions.length} Fragen richtig beantwortet.`;
 }
 </script>
-
-</body>
-</html>
 
   <!-- Fall 1 -->
   <section id="case1" style="display:none;">
