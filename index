@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SEBU Lern-App - Übungssachverhalte Verkehrsrecht GS</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f6f6f6; color: #222; margin: 0; padding: 0; }
+  header { background: #823125; color: white; text-align: center; padding: 1.2rem; }
+  h1 { margin: 0.2em 0 0.1em; font-size: 1.4rem; }
+  h2 { margin: 0; font-weight: normal; font-size: 1rem; opacity: 0.9; }
+  main { max-width: 700px; margin: 2rem auto; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); padding: 2rem; }
+
+  .start-page button { display: block; width: 100%; margin-bottom: 1rem; padding: 1rem; font-size: 1rem; border-radius: 8px; border: 1px solid #823125; background: #fff8f6; cursor: pointer; transition: all 0.2s ease; }
+  .start-page button:hover { background: #f0e5e2; }
+
+  .case-box { background: #fff8f6; border-left: 6px solid #823125; padding: 1rem 1.2rem; border-radius: 8px; margin-bottom: 2rem; }
+  .case-box h3 { margin-top: 0; color: #823125; }
+
+  .question { margin-bottom: 2rem; }
+  .question h3 { margin-bottom: 0.6rem; }
+  button.answer-btn { display: block; margin-top: 0.5rem; background: #eaeaea; border: 1px solid #ccc; border-radius: 6px; padding: 0.4rem 0.8rem; width: 100%; text-align: left; cursor: pointer; transition: all 0.2s ease; }
+  button.answer-btn:hover { background: #f0f0f0; }
+  button.correct { background: #c8e6c9; border-color: #388e3c; color: #2e7d32; }
+  button.incorrect { background: #ffcdd2; border-color: #c62828; color: #b71c1c; }
+  .feedback { margin-top: 0.3rem; font-size: 0.9rem; }
+  .correct-answer { background-color: #d4edda !important; border-radius: 6px; padding: 2px 6px; }
+  .summary { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ccc; font-weight: bold; font-size: 1rem; color: #823125; }
+  .footer-note { text-align: center; font-size: 0.8rem; margin-top: 2rem; color: #666; }
+  .back-btn { margin-top: 2rem; background: #823125; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer; }
+  .back-btn:hover { background: #a23d2f; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SEBU Lern-App – Übungssachverhalte Verkehrsrecht GS</h1>
+  <h2>Dipl.-Verww. (FH) PHK Sebastian Burbach, M.A.</h2>
+</header>
+
+<main>
+  <!-- Startseite -->
+  <div id="startPage" class="start-page">
+    <button onclick="openCase('case0')">Übung: Definitionen/Auslegungen</button>
+    <button onclick="openCase('case1')">Übungsfall: Kind als Radfahrer auf dem Gehweg</button>
+    <button onclick="openCase('case2')">Übungsfall: Höchstgeschwindigkeiten</button>
+    <button onclick="openCase('case3')">Übung: Grundlagen des § 1 Abs. 2 StVO</button>
+  </div>
+
+  <!-- Fall 0 -->
+  <section id="case0" style="display:none;">
+    <div class="case-box">
+      <h3>Übung: Definitionen/Auslegungen</h3>
+      <p><strong>Aufgabe:</strong> Ordne die Definitionen/Auslegungen, Inhalte und Rechtsgrundlagen korrekt zu.</p>
+    </div>
+
+    <div class="question" id="q0_1">
+      <h3>1. Wo steht die Legaldefinition des Begriffs „Fahrstreifen“?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 1 S. 2 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">§ 7 Abs. 1 S. 2 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">VwV zu § 2 StVO</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q0_2" data-multi="true">
+      <h3>2. Welche Merkmale machen eine Fahrbahn aus? (zwei richtige Antworten)</h3>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,true)">Sie muss geeignet sein</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Sie muss für jedermann tatsächlich zur Verfügung stehen</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,true)">Sie muss freigegeben sein</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Sie muss Fahrbahnmarkierungen haben</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Sie darf nur mit Kraftfahrzeugen befahren werden</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q0_3">
+      <h3>3. Zu welchem Teilbereich des öffentlichen Verkehrsraums gehört die wegerechtliche Widmung?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">öffentlich-tatsächlicher Verkehrsraum</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">öffentlich-rechtlicher Verkehrsraum</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary0" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <!-- Fall 1 -->
+  <section id="case1" style="display:none;">
+    <div class="case-box">
+      <h3>Übungssachverhalt</h3>
+      <p><strong>SV:</strong> A, neun Jahre alt, fährt mit seinem Fahrrad auf dem Gehweg.</p>
+    </div>
+
+    <div class="question" id="q1_1">
+      <h3>1. Aufgrund welcher Rechtsgrundlage darf er das?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 1 S. 1 Alt. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">§ 2 Abs. 5 S. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 2 StVO</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q1_2">
+      <h3>2. Was ändert sich, wenn es sich um ein Kinderfahrrad handelt?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">A darf weiter auf dem Gehweg fahren</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">A muss nun auf der Fahrbahn fahren</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">A muss weiter auf dem Gehweg fahren</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q1_3">
+      <h3>3. Welche Rechtsgrundlagen sind einschlägig, wenn es sich um ein Kinderfahrrad handelt?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">§ 24 Abs. 1 S. 1, S. 2, § 25 Abs. 1 S. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 1 S. 1 Alt. 1, Abs. 5 S. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 2, Abs. 5 S. 1, § 49 Abs. 1 Nr. 2 StVO</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary1" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <!-- Fall 2 -->
+  <section id="case2" style="display:none;">
+    <div class="case-box">
+      <h3>Übungsfall: Höchstgeschwindigkeiten</h3>
+      <p><strong>Aufgabe:</strong> Wie hoch ist die zulässige Höchstgeschwindigkeit der nachfolgend genannten Fahrzeug-e/kombinationen gem. § 3 Abs. 3 bzw. § 18 Abs. 5 StVO?</p>
+    </div>
+
+    <div class="question" id="q2_1">
+      <h3>1. Lkw (12 t) mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">60 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Höchstgeschwindigkeit</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_2">
+      <h3>2. Pkw mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">60 km/h</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_3">
+      <h3>3. Pkw ohne Anhänger (innerorts)</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_4">
+      <h3>4. Lkw (7,5 t) ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_5">
+      <h3>5. Kraftrad ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_6">
+      <h3>6. Kraftrad mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_7">
+      <h3>7. Omnibus mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">60 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_8">
+      <h3>8. Omnibus ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_9">
+      <h3>9. Pkw Wohnmobil über 3,5 t</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary2" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <!-- Fall 3 -->
+  <section id="case3" style="display:none;">
+    <div class="case-box">
+      <h3>Übung: Grundlagen des § 1 Abs. 2 StVO</h3>
+      <p><strong>Aufgabe:</strong> Beantworten Sie die nachfolgenden Fragen.</p>
+    </div>
+
+    <div class="question" id="q3_1">
+      <h3>1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Belästigung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Gefährdung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">Schädigung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q3_2">
+      <h3>2. Wann wird § 1 Abs. 2 StVO als Auffangtatbestand angewandt?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Wenn rechtlicher Überhang besteht</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">Wenn keine Spezialnorm existiert</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Wenn die Spezialnorm nicht einschlägig ist</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q3_3">
+      <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">Eine Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Rechtlichen Überhang</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Eine Bezugsnorm</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary3" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <div class="footer-note">© SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS</div>
+</main>
+
+<script>
+/* Navigation */
+function openCase(id){
+  document.getElementById('startPage').style.display='none';
+  document.querySelectorAll('section').forEach(s => s.style.display='none');
+  const section = document.getElementById(id);
+  if(section) section.style.display='block';
+}
+function backToStart(){
+  document.querySelectorAll('section').forEach(s => s.style.display='none');
+  document.getElementById('startPage').style.display='block';
+}
+
+/* Einzelantwort-Logik */
+function checkAnswer(btn,isCorrect){
+  const question = btn.parentElement;
+  const buttons = question.querySelectorAll('.answer-btn');
+  const feedback = question.querySelector('.feedback');
+
+  // Verhindere erneutes Klicken
+  if([...buttons].some(b=>b.disabled)) return;
+  buttons.forEach(b=>b.disabled=true);
+
+  if(isCorrect){
+    btn.classList.add('correct');
+    feedback.textContent='✅ Richtig!';
+    question.dataset.answeredCorrect="true";
+  } else {
+    btn.classList.add('incorrect');
+    feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
+    // markiere richtige Antwort(en)
+    buttons.forEach(b=>{
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
+    });
+    question.dataset.answeredCorrect="false";
+  }
+  updateSummary(question.closest('section'));
+}
+
+/* Strenge Multi-Answer-Logik:
+   - sofort falsch, wenn eine falsche Antwort angeklickt wird
+   - richtig, wenn alle richtigen Antworten angeklickt wurden (ohne falsche Auswahl)
+*/
+function checkAnswerMulti(btn,isCorrect){
+  const question = btn.parentElement;
+  const buttons = question.querySelectorAll('.answer-btn');
+  const feedback = question.querySelector('.feedback');
+
+  if(btn.disabled) return;
+  btn.disabled = true;
+
+  // initialisierte Zählwerte
+  if(!question.dataset.correctClicks) question.dataset.correctClicks = "0";
+  if(!question.dataset.wrongClicked) question.dataset.wrongClicked = "false";
+
+  if(!isCorrect){
+    // sofort falsch
+    btn.classList.add('incorrect');
+    question.dataset.wrongClicked = "true";
+    feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
+    // deaktiviere und hebe richtige Antworten hervor
+    buttons.forEach(b=>{
+      b.disabled = true;
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
+    });
+    question.dataset.answeredCorrect="false";
+    updateSummary(question.closest('section'));
+    return;
+  }
+
+  // richtige Antwort angeklickt
+  btn.classList.add('correct');
+  question.dataset.correctClicks = String(parseInt(question.dataset.correctClicks) + 1);
+
+  // prüfen, ob alle richtigen Antworten gewählt wurden und keine falsche gewählt wurde
+  const totalTrue = Array.from(buttons).filter(b => b.getAttribute('onclick').includes('true')).length;
+  const correctClicks = parseInt(question.dataset.correctClicks);
+
+  if(correctClicks === totalTrue && question.dataset.wrongClicked === "false"){
+    feedback.textContent='✅ Alle Antworten korrekt!';
+    buttons.forEach(b=>b.disabled = true);
+    question.dataset.answeredCorrect="true";
+    updateSummary(question.closest('section'));
+  }
+}
+
+/* Summary für Abschnitt */
+function updateSummary(section){
+  const questions = section.querySelectorAll('.question');
+  let correctCount = 0;
+  questions.forEach(q=>{
+    if(q.dataset.answeredCorrect === "true") correctCount++;
+  });
+  section.querySelector('.summary').textContent=`Du hast ${correctCount} von ${questions.length} Fragen richtig beantwortet.`;
+}
+</script>
+
+</body>
+</html>
