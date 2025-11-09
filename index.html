@@ -322,6 +322,42 @@
     <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
   </section>
 
+   <!-- Fall 3 -->
+  <section id="case3" style="display:none;">
+    <div class="case-box">
+      <h3>Übung: Grundlagen des § 1 Abs. 2 StVO</h3>
+      <p><strong>Aufgabe:</strong> Beantworten Sie die nachfolgenden Fragen.</p>
+    </div>
+
+    <div class="question" id="q0_1">
+      <h3>1. 1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Belästigung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Gefährdung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, true)">Schädigung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q0_2" data-multi="true">
+      <h3>2. Wann wird § 1 Abs. 2 StVO als Auffangtatbestand angewandt?</h3>
+      <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Wenn rechtlicher Überhang besteht</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this, true)">Wenn keine Spezialnorm existiert</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this, false)">Wenn die Spezialnorm nicht einschlägig ist</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q0_3">
+      <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this, true)">Eine Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Rechtlichen Überhang</button>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Eine Bezugsnorm</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary0" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
   <div class="footer-note">
     © SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS
   </div>
