@@ -356,6 +356,12 @@ function updateSummary(section){
   section.querySelector('.summary').textContent=`Du hast ${correctCount} von ${questions.length} Fragen richtig beantwortet.`;
 }
 </script>
-
+  
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+</script>
+  
 </body>
 </html>
