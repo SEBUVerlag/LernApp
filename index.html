@@ -125,14 +125,94 @@
       <p><strong>Aufgabe:</strong> Wie hoch ist die zulässige Höchstgeschwindigkeit der nachfolgend genannten Fahrzeug-e/kombinationen gem. § 3 Abs. 3 bzw. § 18 Abs. 5 StVO?</p>
     </div>
 
-    <!-- Frage Beispiel q2_1 -->
+    <!-- Fragen q2_1 bis q2_9 -->
     <div class="question" id="q2_1">
-      <h3>1. Lkw (12 t) mit Anhänger a.g.O.</h3>
+      <h3>1. Lkw (12 t) mit Anhänger</h3>
       <button class="answer-btn" onclick="checkAnswer(this,true)">60 km/h</button>
       <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
       <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
       <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
       <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Höchstgeschwindigkeit</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_2">
+      <h3>2. Pkw mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">60 km/h</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_3">
+      <h3>3. Pkw ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">50 km/h innerorts</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_4">
+      <h3>4. Lkw (7,5 t) ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_5">
+      <h3>5. Kraftrad ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_6">
+      <h3>6. Kraftrad mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_7">
+      <h3>7. Omnibus mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">60 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_8">
+      <h3>8. Omnibus ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_9">
+      <h3>9. Pkw Wohnmobil über 3,5 t</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
       <div class="feedback"></div>
     </div>
 
@@ -165,101 +245,4 @@
     </div>
 
     <div class="question" id="q3_3">
-      <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
-      <button class="answer-btn" onclick="checkAnswer(this,true)">Eine Behinderung</button>
-      <button class="answer-btn" onclick="checkAnswer(this,false)">Rechtlichen Überhang</button>
-      <button class="answer-btn" onclick="checkAnswer(this,false)">Eine Bezugsnorm</button>
-      <div class="feedback"></div>
-    </div>
-
-    <div id="summary3" class="summary"></div>
-    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
-  </section>
-
-  <div class="footer-note">© SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS</div>
-</main>
-
-<script>
-function openCase(id){
-  document.getElementById('startPage').style.display='none';
-  document.querySelectorAll('section').forEach(s => s.style.display='none');
-  const section = document.getElementById(id);
-  if(section) section.style.display='block';
-}
-
-function backToStart(){
-  document.querySelectorAll('section').forEach(s => s.style.display='none');
-  document.getElementById('startPage').style.display='block';
-}
-
-function checkAnswer(btn,isCorrect){
-  const question = btn.parentElement;
-  const buttons = question.querySelectorAll('.answer-btn');
-  const feedback = question.querySelector('.feedback');
-
-  if([...buttons].some(b=>b.disabled)) return;
-  buttons.forEach(b=>b.disabled=true);
-
-  if(isCorrect){
-    btn.classList.add('correct');
-    feedback.textContent='✅ Richtig!';
-    question.dataset.answeredCorrect="true";
-  } else {
-    btn.classList.add('incorrect');
-    feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
-    buttons.forEach(b=>{
-      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
-    });
-    question.dataset.answeredCorrect="false";
-  }
-  updateSummary(question.closest('section'));
-}
-
-function checkAnswerMulti(btn,isCorrect){
-  const question = btn.parentElement;
-  const buttons = question.querySelectorAll('.answer-btn');
-  const feedback = question.querySelector('.feedback');
-
-  if(btn.disabled) return;
-  btn.disabled = true;
-
-  if(!question.dataset.correctClicks) question.dataset.correctClicks = "0";
-  if(!question.dataset.wrongClicked) question.dataset.wrongClicked = "false";
-
-  if(!isCorrect){
-    btn.classList.add('incorrect');
-    question.dataset.wrongClicked="true";
-    buttons.forEach(b=>b.disabled=true);
-    buttons.forEach(b=>{
-      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
-    });
-    feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
-    question.dataset.answeredCorrect="false";
-    updateSummary(question.closest('section'));
-    return;
-  } else {
-    btn.classList.add('correct');
-    question.dataset.correctClicks = parseInt(question.dataset.correctClicks)+1;
-  }
-
-  const totalTrue = Array.from(buttons).filter(b=>b.getAttribute('onclick').includes('true')).length;
-  if(parseInt(question.dataset.correctClicks) === totalTrue && question.dataset.wrongClicked === "false"){
-    feedback.textContent='✅ Alle Antworten korrekt!';
-    buttons.forEach(b=>b.disabled=true);
-    question.dataset.answeredCorrect="true";
-    updateSummary(question.closest('section'));
-  }
-}
-
-function updateSummary(section){
-  const questions = section.querySelectorAll('.question');
-  let correctCount = 0;
-  questions.forEach(q=>{
-    if(q.dataset.answeredCorrect === "true") correctCount++;
-  });
-  section.querySelector('.summary').textContent=`Du hast ${correctCount} von ${questions.length} Fragen richtig beantwortet.`;
-}
-</script>
-
-</body>
-</html>
+      <h3>3.
