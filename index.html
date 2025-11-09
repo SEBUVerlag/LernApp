@@ -32,24 +32,24 @@
   .back-btn { margin-top: 2rem; background: #823125; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer; }
   .back-btn:hover { background: #a23d2f; }
 
-  <!-- Für die Installation als App -->
-  .install-hint {
-  background-color: #f8f8f8;
-  border-left: 4px solid #823125;
-  border-radius: 12px;
-  padding: 1rem 1.2rem;
-  margin-top: 2rem;
-  font-size: 0.9rem;
+/* Hinweis-Box unten über dem Footer, schwebend */
+.app-hint {
+  font-size: 0.85rem;           /* kleinerer Text */
   color: #333;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-.install-hint h4 {
-  margin-top: 0;
-  color: #823125;
-  font-size: 1rem;
-}
-.install-hint em {
-  font-style: italic;
+  background-color: #fff8f6;    /* heller Hintergrund */
+  border: 1px solid #823125;    /* Rahmenfarbe passend zum CD */
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  max-width: 700px;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  
+  position: fixed;              /* fixiert am Bildschirm */
+  bottom: 60px;                 /* Abstand vom unteren Rand (über Footer) */
+  left: 50%;                    /* zentriert */
+  transform: translateX(-50%);
+  z-index: 1000;                /* über anderen Inhalten */
+  text-align: center;
 }
 </style>
 </head>
@@ -69,12 +69,10 @@
     <button onclick="openCase('case3')">Übung: Grundlagen des § 1 Abs. 2 StVO</button>
   </div>
 
-  <!-- Infobox, wie man die App speichert -->
-  <div class="install-hint">
-  <h4>📱 App auf dem Smartphone speichern</h4>
-  <p><strong>iPhone/iPad (Safari):</strong> Tippen Sie auf das <em>Teilen-Symbol</em> (<span style="font-size:1.2em;">⬆️</span>) und wählen Sie <em>„Zum Home-Bildschirm“</em>.</p>
-  <p><strong>Android (Chrome, Edge u. a.):</strong> Tippen Sie auf die <em>drei Punkte ⋮</em> oben rechts und wählen Sie <em>„Zum Startbildschirm hinzufügen“</em>.</p>
-  <p>Danach können Sie die Lern-App direkt vom Startbildschirm öffnen – im Vollbildmodus ohne Browser-Leiste.</p>
+ <!-- Hinweis-Box auf Startseite -->
+<div class="app-hint">
+  <p><strong>iOS:</strong> Tippe auf das Teilen-Symbol ⬆︎ und wähle „Zum Home-Bildschirm“.</p>
+  <p><strong>Android:</strong> Tippe auf die drei Punkte ⋮ und wähle „Zum Startbildschirm hinzufügen“.</p>
 </div>
 
   <!-- Fall 0 -->
