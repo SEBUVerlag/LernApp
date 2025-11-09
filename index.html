@@ -322,20 +322,23 @@
     <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
   </section>
 
-  <!-- Übung: § 1 Abs. 2 StVO -->
-  <!-- Abschnitt: § 1 Abs. 2 StVO -->
-<div id="sto1abs2"></div>
-<div class="frage">
-  <h2>Übung: § 1 Abs. 2 StVO</h2>
-  <h3>1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
-  <button onclick="checkAnswer(this, false)">Belästigung</button>
-  <button onclick="checkAnswer(this, false)">Behinderung</button>
-  <button onclick="checkAnswer(this, true)">Gefährdung</button>
-  <button onclick="checkAnswer(this, false)">Schädigung</button>
-  <p class="feedback"></p>
-</div>
+  <!-- Fall 3 -->
+  <section id="case3" style="display:none;">
+    <div class="case-box">
+      <h3>Übungssachverhalt</h3>
+      <p><strong>SV:</strong> Grundlagen des § 1 Abs. 2 StVO</p>
+    </div>
 
-<div class="frage">
+    <div class="question" id="q1_1">
+      <h3>1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Belästigung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, false)">Gefährdung</button>
+      <button class="answer-btn" onclick="checkAnswer(this, true)">Schädigung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q1_2">
   <h3>2. Wann wird § 1 Abs. 2 StVO als Auffangtatbestand angewandt?</h3>
   <button onclick="checkAnswer(this, false)">Wenn rechtlicher Überhang vorliegt</button>
   <button onclick="checkAnswer(this, true)">Wenn keine Spezialnorm existiert</button>
@@ -343,13 +346,16 @@
   <p class="feedback"></p>
 </div>
 
-<div class="frage">
+<div class="question" id="q1_3">
   <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
-  <button onclick="checkAnswer(this, false)">Eine Behinderung</button>
-  <button onclick="checkAnswer(this, true)">Rechtlichen Überhang</button>
+  <button onclick="checkAnswer(this, true)">Eine Behinderung</button>
+  <button onclick="checkAnswer(this, false)">Rechtlichen Überhang</button>
   <button onclick="checkAnswer(this, false)">Eine Bezugsnorm</button>
   <p class="feedback"></p>
-</div>
+
+    <div id="summary1" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
 
   <div class="footer-note">
     © SEBU Verlag Freudenberg – Lern-App Verkehrsrecht GS
