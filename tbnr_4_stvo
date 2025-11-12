@@ -75,17 +75,26 @@
       background-color: #a23c2c;
     }
 
-    #zurueck {
-      display: block;
+    /* Button-Style auch für Links (z. B. "Zurück") */
+    a.button {
+      display: inline-block;
+      background-color: #823125;
+      color: white;
       text-align: center;
-      margin-top: 2rem;
-      color: #823125;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
       text-decoration: none;
       font-weight: 500;
+      transition: background-color 0.2s;
     }
 
-    #zurueck:hover {
-      text-decoration: underline;
+    a.button:hover {
+      background-color: #a23c2c;
+    }
+
+    .zurueck-container {
+      text-align: center;
+      margin-top: 2.5rem;
     }
   </style>
 </head>
@@ -142,7 +151,10 @@
       <p id="feedback5"></p>
     </div>
 
-    <a id="zurueck" href="index.html">← Zurück zur Startseite</a>
+    <!-- Zurück-Button -->
+    <div class="zurueck-container">
+      <a href="index.html" class="button">← Zurück zur Startseite</a>
+    </div>
   </main>
 
   <script>
