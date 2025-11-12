@@ -32,20 +32,21 @@
   .back-btn { margin-top: 2rem; background: #823125; color: white; border: none; padding: 0.8rem 1.2rem; border-radius: 6px; cursor: pointer; }
   .back-btn:hover { background: #a23d2f; }
 
-  /* Hinweis-Box am unteren Ende der Startseite */
-  .app-hint {
-    font-size: 0.85rem;
-    color: #823125;
-    background-color: #ffffff;
-    border: 1px solid #823125;
-    border-radius: 8px;
-    padding: 0.8rem 1rem;
-    max-width: 700px;
-    line-height: 1.3;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    text-align: center;
-    margin: 2rem auto 1rem auto;
-  }
+/* Hinweis-Box am unteren Ende der Startseite */
+.app-hint {
+  font-size: 0.85rem;            /* kleinerer Text */
+  color: #823125;                 /* SEBU-Rot */
+  background-color: #ffffff;      /* weißer Hintergrund */
+  border: 1px solid #823125;     /* Rahmenfarbe SEBU-Rot */
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  max-width: 700px;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+  text-align: center;
+  margin: 2rem auto 1rem auto;   /* Abstand oben/unten, zentriert */
+}
   
 </style>
 </head>
@@ -63,43 +64,219 @@
     <button onclick="openCase('case1')">Übungsfall: Kind als Radfahrer auf dem Gehweg</button>
     <button onclick="openCase('case2')">Übungsfall: Höchstgeschwindigkeiten</button>
     <button onclick="openCase('case3')">Übung: Grundlagen des § 1 Abs. 2 StVO</button>
-    <button onclick="openCase('case4')">Übung: Neue Übung 5</button>
   </div>
 
   <!-- Fall 0 -->
-  <!-- (Inhalt unverändert) -->
-  ... [Hier bleibt der bisherige Code für case0, case1, case2, case3 unverändert] ...
-
-  <!-- Fall 4 / Neue Übung 5 -->
-  <section id="case4" style="display:none;">
+  <section id="case0" style="display:none;">
     <div class="case-box">
-      <h3>Übung: Neue Übung 5</h3>
-      <p><strong>Aufgabe:</strong> Beantworte die folgenden Fragen zu diesem Übungssachverhalt.</p>
+      <h3>Übung: Definitionen/Auslegungen</h3>
+      <p><strong>Aufgabe:</strong> Ordne die Definitionen/Auslegungen, Inhalte und Rechtsgrundlagen korrekt zu.</p>
     </div>
 
-    <div class="question" id="q4_1">
-      <h3>1. Beispiel-Frage 1</h3>
-      <button class="answer-btn" onclick="checkAnswer(this,true)">Antwort A (richtig)</button>
-      <button class="answer-btn" onclick="checkAnswer(this,false)">Antwort B</button>
-      <button class="answer-btn" onclick="checkAnswer(this,false)">Antwort C</button>
+    <div class="question" id="q0_1">
+      <h3>1. Wo steht die Legaldefinition des Begriffs „Fahrstreifen“?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 1 S. 2 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">§ 7 Abs. 1 S. 2 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">VwV zu § 2 StVO</button>
       <div class="feedback"></div>
     </div>
 
-    <div class="question" id="q4_2" data-multi="true">
-      <h3>2. Beispiel-Frage 2 (mehrere richtige Antworten)</h3>
-      <button class="answer-btn" onclick="checkAnswerMulti(this,true)">Antwort A (richtig)</button>
-      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Antwort B</button>
-      <button class="answer-btn" onclick="checkAnswerMulti(this,true)">Antwort C (richtig)</button>
+    <div class="question" id="q0_2" data-multi="true">
+      <h3>2. Welche Merkmale machen eine Fahrbahn aus? (zwei richtige Antworten)</h3>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,true)">Sie muss geeignet sein</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Sie muss für jedermann tatsächlich zur Verfügung stehen</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,true)">Sie muss freigegeben sein</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Sie muss Fahrbahnmarkierungen haben</button>
+      <button class="answer-btn" onclick="checkAnswerMulti(this,false)">Sie darf nur mit Kraftfahrzeugen befahren werden</button>
       <div class="feedback"></div>
     </div>
 
-    <div id="summary4" class="summary"></div>
+    <div class="question" id="q0_3">
+      <h3>3. Zu welchem Teilbereich des öffentlichen Verkehrsraums gehört die wegerechtliche Widmung?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">öffentlich-tatsächlicher Verkehrsraum</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">öffentlich-rechtlicher Verkehrsraum</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary0" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <!-- Fall 1 -->
+  <section id="case1" style="display:none;">
+    <div class="case-box">
+      <h3>Übungssachverhalt</h3>
+      <p><strong>SV:</strong> A, neun Jahre alt, fährt mit seinem Fahrrad auf dem Gehweg.</p>
+    </div>
+
+    <div class="question" id="q1_1">
+      <h3>1. Aufgrund welcher Rechtsgrundlage darf er das?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 1 S. 1 Alt. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">§ 2 Abs. 5 S. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 2 StVO</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q1_2">
+      <h3>2. Was ändert sich, wenn es sich um ein Kinderfahrrad handelt?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">A darf weiter auf dem Gehweg fahren</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">A muss nun auf der Fahrbahn fahren</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">A muss weiter auf dem Gehweg fahren</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q1_3">
+      <h3>3. Welche Rechtsgrundlagen sind einschlägig, wenn es sich um ein Kinderfahrrad handelt?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">§ 24 Abs. 1 S. 1, S. 2, § 25 Abs. 1 S. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 1 S. 1 Alt. 1, Abs. 5 S. 1 StVO</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">§ 2 Abs. 2, Abs. 5 S. 1, § 49 Abs. 1 Nr. 2 StVO</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary1" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <!-- Fall 2 -->
+  <section id="case2" style="display:none;">
+    <div class="case-box">
+      <h3>Übungsfall: Höchstgeschwindigkeiten</h3>
+      <p><strong>Aufgabe:</strong> Wie hoch ist die zulässige Höchstgeschwindigkeit der nachfolgend genannten Fahrzeug-e/kombinationen gem. § 3 Abs. 3 bzw. § 18 Abs. 5 StVO?</p>
+    </div>
+
+    <div class="question" id="q2_1">
+      <h3>1. Lkw (12 t) mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">60 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Höchstgeschwindigkeit</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_2">
+      <h3>2. Pkw mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">60 km/h</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_3">
+      <h3>3. Pkw ohne Anhänger (innerorts)</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_4">
+      <h3>4. Lkw (7,5 t) ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_5">
+      <h3>5. Kraftrad ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_6">
+      <h3>6. Kraftrad mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_7">
+      <h3>7. Omnibus mit Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">60 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_8">
+      <h3>8. Omnibus ohne Anhänger</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q2_9">
+      <h3>9. Pkw Wohnmobil über 3,5 t</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">50 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">80 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">100 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">120 km/h</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Keine Begrenzung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary2" class="summary"></div>
+    <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
+  </section>
+
+  <!-- Fall 3 -->
+  <section id="case3" style="display:none;">
+    <div class="case-box">
+      <h3>Übung: Grundlagen des § 1 Abs. 2 StVO</h3>
+      <p><strong>Aufgabe:</strong> Beantworten Sie die nachfolgenden Fragen.</p>
+    </div>
+
+    <div class="question" id="q3_1">
+      <h3>1. Welche Variante des § 1 Abs. 2 StVO ist immer Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Belästigung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Gefährdung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">Schädigung</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q3_2">
+      <h3>2. Wann wird § 1 Abs. 2 StVO als Auffangtatbestand angewandt?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Wenn rechtlicher Überhang besteht</button>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">Wenn keine Spezialnorm existiert</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Wenn die Spezialnorm nicht einschlägig ist</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question" id="q3_3">
+      <h3>3. Was benötigt man NICHT für die Anwendung des § 1 Abs. 2 StVO als Qualifizierungstatbestand?</h3>
+      <button class="answer-btn" onclick="checkAnswer(this,true)">Eine Behinderung</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Rechtlichen Überhang</button>
+      <button class="answer-btn" onclick="checkAnswer(this,false)">Eine Bezugsnorm</button>
+      <div class="feedback"></div>
+    </div>
+
+    <div id="summary3" class="summary"></div>
     <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
   </section>
 
   <!-- Hinweis-Box auf Startseite -->
 <div class="app-hint">
-  <p><strong>Installation der Lern-App:</strong></p>
+  <p><strong>Installation der Lern-App:</strongt></strong></p>
   <p><strong>iOS:</strong> Tippe auf das Teilen-Symbol ⬆︎ und wähle „Zum Home-Bildschirm“.</p>
   <p><strong>Android:</strong> Tippe auf die drei Punkte ⋮ und wähle „Zum Startbildschirm hinzufügen“.</p>
 </div>
@@ -126,6 +303,7 @@ function checkAnswer(btn,isCorrect){
   const buttons = question.querySelectorAll('.answer-btn');
   const feedback = question.querySelector('.feedback');
 
+  // Verhindere erneutes Klicken
   if([...buttons].some(b=>b.disabled)) return;
   buttons.forEach(b=>b.disabled=true);
 
@@ -136,6 +314,7 @@ function checkAnswer(btn,isCorrect){
   } else {
     btn.classList.add('incorrect');
     feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
+    // markiere richtige Antwort(en)
     buttons.forEach(b=>{
       if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
     });
@@ -144,7 +323,10 @@ function checkAnswer(btn,isCorrect){
   updateSummary(question.closest('section'));
 }
 
-/* Multi-Answer-Logik */
+/* Strenge Multi-Answer-Logik:
+   - sofort falsch, wenn eine falsche Antwort angeklickt wird
+   - richtig, wenn alle richtigen Antworten angeklickt wurden (ohne falsche Auswahl)
+*/
 function checkAnswerMulti(btn,isCorrect){
   const question = btn.parentElement;
   const buttons = question.querySelectorAll('.answer-btn');
@@ -153,13 +335,16 @@ function checkAnswerMulti(btn,isCorrect){
   if(btn.disabled) return;
   btn.disabled = true;
 
+  // initialisierte Zählwerte
   if(!question.dataset.correctClicks) question.dataset.correctClicks = "0";
   if(!question.dataset.wrongClicked) question.dataset.wrongClicked = "false";
 
   if(!isCorrect){
+    // sofort falsch
     btn.classList.add('incorrect');
     question.dataset.wrongClicked = "true";
     feedback.textContent='❌ Leider falsch – bitte schau Dir die Inhalte der Rechtsnormen noch einmal genauer an.';
+    // deaktiviere und hebe richtige Antworten hervor
     buttons.forEach(b=>{
       b.disabled = true;
       if(b.getAttribute('onclick').includes('true')) b.classList.add('correct-answer');
@@ -169,9 +354,11 @@ function checkAnswerMulti(btn,isCorrect){
     return;
   }
 
+  // richtige Antwort angeklickt
   btn.classList.add('correct');
   question.dataset.correctClicks = String(parseInt(question.dataset.correctClicks) + 1);
 
+  // prüfen, ob alle richtigen Antworten gewählt wurden und keine falsche gewählt wurde
   const totalTrue = Array.from(buttons).filter(b => b.getAttribute('onclick').includes('true')).length;
   const correctClicks = parseInt(question.dataset.correctClicks);
 
