@@ -65,8 +65,42 @@
     <button onclick="openCase('case4')">Übung: TBNR zu § 4 StVO</button>
   </div>
 
-  <!-- Fall 4: Freitextfragen -->
-  <section id="case4" style="display:none;">
+  <!-- Bisherige Fälle -->
+  <div id="case0" class="case" style="display:none;">
+    <!-- Hier bleibt dein bisheriger Fall 0 -->
+    <div class="case-box">
+      <h3>Übung: Definitionen/Auslegungen</h3>
+      <p>(Hier bleibt dein vorhandener Inhalt.)</p>
+    </div>
+    <button class="back-btn" onclick="backToStart()">← Zurück</button>
+  </div>
+
+  <div id="case1" class="case" style="display:none;">
+    <div class="case-box">
+      <h3>Übungsfall: Kind als Radfahrer auf dem Gehweg</h3>
+      <p>(Hier bleibt dein vorhandener Inhalt.)</p>
+    </div>
+    <button class="back-btn" onclick="backToStart()">← Zurück</button>
+  </div>
+
+  <div id="case2" class="case" style="display:none;">
+    <div class="case-box">
+      <h3>Übungsfall: Höchstgeschwindigkeiten</h3>
+      <p>(Hier bleibt dein vorhandener Inhalt.)</p>
+    </div>
+    <button class="back-btn" onclick="backToStart()">← Zurück</button>
+  </div>
+
+  <div id="case3" class="case" style="display:none;">
+    <div class="case-box">
+      <h3>Übung: Grundlagen des § 1 Abs. 2 StVO</h3>
+      <p>(Hier bleibt dein vorhandener Inhalt.)</p>
+    </div>
+    <button class="back-btn" onclick="backToStart()">← Zurück</button>
+  </div>
+
+  <!-- Neue Freitext-Übung -->
+  <section id="case4" class="case" style="display:none;">
     <div class="case-box">
       <h3>Übung: TBNR zu § 4 StVO</h3>
       <p><strong>Aufgabe:</strong> Bestimmen Sie zu den nachfolgenden Sachverhalten die korrekte Tatbestandsnummer (TBNR). Geben Sie diese in das Textfeld ein.</p>
@@ -111,7 +145,7 @@
     <button class="back-btn" onclick="backToStart()">← Zurück zur Übersicht</button>
   </section>
 
-  <!-- Hinweis-Box auf Startseite -->
+  <!-- Hinweis-Box -->
   <div class="app-hint">
     <p><strong>Installation der Lern-App:</strong></p>
     <p><strong>iOS:</strong> Tippe auf das Teilen-Symbol ⬆︎ und wähle „Zum Home-Bildschirm“.</p>
@@ -123,17 +157,19 @@
 
 <script>
 /* Navigation */
-function openCase(id){
-  document.getElementById('startPage').style.display='none';
-  document.querySelectorAll('section').forEach(s => s.style.display='none');
-  const section = document.getElementById(id);
-  if(section) section.style.display='block';
-}
-function backToStart(){
-  document.querySelectorAll('section').forEach(s => s.style.display='none');
-  document.getElementById('startPage').style.display='block';
+function openCase(id) {
+  document.getElementById('startPage').style.display = 'none';
+  document.querySelectorAll('section, .case').forEach(s => s.style.display = 'none');
+  const ziel = document.getElementById(id);
+  if (ziel) ziel.style.display = 'block';
 }
 
+function backToStart() {
+  document.querySelectorAll('section, .case').forEach(s => s.style.display = 'none');
+  document.getElementById('startPage').style.display = 'block';
+}
+
+/* Freitexteingaben prüfen */
 function pruefeAntwort(nr) {
   const richtigeAntworten = {
     1: "104100",
@@ -157,9 +193,9 @@ function pruefeAntwort(nr) {
 </script>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
 </script>
 
 </body>
