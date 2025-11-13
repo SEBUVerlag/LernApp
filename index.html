@@ -145,6 +145,46 @@
             explanation: "Wohnmobil über 3,5 t mit Anhänger: 60 km/h"
           }
         ]
+      },
+      tbnr: {
+        title: "Übung: TBNR zu § 4 StVO",
+        questions: [
+          {
+            id: 1,
+            type: "tbnr-input",
+            question: "Pkw, 80 km/h, Abstand 35 m",
+            correctAnswer: "104100",
+            explanation: "TBNR 104100: Pkw bei 80 km/h mit weniger als 5/10 des halben Tachowertes Abstand (weniger als 40 m)"
+          },
+          {
+            id: 2,
+            type: "tbnr-input",
+            question: "Lkw, 12 t, 80 km/h auf BAB, Abstand 40 m",
+            correctAnswer: "104636",
+            explanation: "TBNR 104636: Lkw über 3,5 t auf BAB bei 80 km/h mit weniger als 5/10 des halben Tachowertes Abstand"
+          },
+          {
+            id: 3,
+            type: "tbnr-input",
+            question: "Wohnmobil/Anhänger, 4,8 t, 60 km/h, a.g.O., Zweirichtungsverkehr mit jeweils einem Fahrstreifen pro Richtung, Abstand 50 m",
+            correctAnswer: "104104",
+            explanation: "TBNR 104104: Fahrzeug mit Anhänger bei mehr als 50 km/h, Abstand weniger als 50 m"
+          },
+          {
+            id: 4,
+            type: "tbnr-input",
+            question: "Pkw, 180 km/h auf BAB, Abstand 35 m",
+            correctAnswer: "104613",
+            explanation: "TBNR 104613: Pkw bei mehr als 130 km/h mit weniger als 5/10 des halben Tachowertes Abstand (unter 80 m bei 130+ km/h)"
+          },
+          {
+            id: 5,
+            type: "tbnr-input",
+            question: "Krad, 100 km/h, a.g.O., Zweirichtungsverkehr mit jeweils zwei Fahrstreifen pro Richtung, Abstand 12 m",
+            correctAnswer: "104602",
+            explanation: "TBNR 104602: Kraftrad bei mehr als 80 km/h mit weniger als 4/10 des halben Tachowertes Abstand"
+          }
+        ]
       }
     };
 
@@ -181,6 +221,8 @@
           correct = question.acceptedAnswers.some(
             accepted => accepted.toLowerCase() === normalizedAnswer
           );
+        } else if (question.type === 'tbnr-input') {
+          correct = userAnswer.trim() === question.correctAnswer;
         } else if (question.type === 'multi-free-text') {
           const newMultiResults = {};
           let allCorrect = true;
@@ -368,6 +410,27 @@
                       </button>
                     ))}
                   </div>
+                ) : currentQuestion.type === 'tbnr-input' ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={userAnswer}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d{0,6}$/.test(value)) {
+                          setUserAnswer(value);
+                        }
+                      }}
+                      disabled={showFeedback}
+                      placeholder="6-stellige TBNR eingeben..."
+                      maxLength="6"
+                      className="w-full p-4 border-2 border-gray-200 rounded-lg focus:outline-none text-center text-2xl font-mono tracking-wider"
+                      style={userAnswer && userAnswer.length === 6 ? { borderColor: '#823125' } : {}}
+                    />
+                    <p className="text-sm text-gray-500 mt-2 text-center">
+                      {userAnswer.length}/6 Ziffern
+                    </p>
+                  </div>
                 ) : currentQuestion.type === 'multi-free-text' ? (
                   <div className="space-y-4">
                     {currentQuestion.subQuestions.map((subQ, index) => (
@@ -441,21 +504,29 @@
                     onClick={checkAnswer}
                     disabled={currentQuestion.type === 'multi-free-text' 
                       ? Object.keys(multiAnswers).length !== currentQuestion.subQuestions.length 
+                      : currentQuestion.type === 'tbnr-input' 
+                      ? userAnswer.length !== 6
                       : !userAnswer}
                     className="text-white px-8 py-3 rounded-lg transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                     style={{ backgroundColor: 
                       (currentQuestion.type === 'multi-free-text' 
                         ? Object.keys(multiAnswers).length === currentQuestion.subQuestions.length 
+                        : currentQuestion.type === 'tbnr-input'
+                        ? userAnswer.length === 6
                         : userAnswer) ? '#823125' : '' 
                     }}
                     onMouseEnter={(e) => { 
                       if ((currentQuestion.type === 'multi-free-text' 
                         ? Object.keys(multiAnswers).length === currentQuestion.subQuestions.length 
+                        : currentQuestion.type === 'tbnr-input'
+                        ? userAnswer.length === 6
                         : userAnswer)) e.target.style.backgroundColor = '#6b2820'; 
                     }}
                     onMouseLeave={(e) => { 
                       if ((currentQuestion.type === 'multi-free-text' 
                         ? Object.keys(multiAnswers).length === currentQuestion.subQuestions.length 
+                        : currentQuestion.type === 'tbnr-input'
+                        ? userAnswer.length === 6
                         : userAnswer)) e.target.style.backgroundColor = '#823125'; 
                     }}
                   >
