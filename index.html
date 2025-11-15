@@ -66,6 +66,51 @@
       </svg>
     );
 
+    const Gauge = ({ className, style }) => (
+      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m12 14 4-4"></path>
+        <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+      </svg>
+    );
+
+    const MoveHorizontal = ({ className, style }) => (
+      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="18 8 22 12 18 16"></polyline>
+        <polyline points="6 8 2 12 6 16"></polyline>
+        <line x1="2" y1="12" x2="22" y2="12"></line>
+      </svg>
+    );
+
+    const ArrowRightLeft = ({ className, style }) => (
+      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m16 3 4 4-4 4"></path>
+        <path d="M20 7H4"></path>
+        <path d="m8 21-4-4 4-4"></path>
+        <path d="M4 17h16"></path>
+      </svg>
+    );
+
+    const GitMerge = ({ className, style }) => (
+      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="18" cy="18" r="3"></circle>
+        <circle cx="6" cy="6" r="3"></circle>
+        <path d="M6 21V9a9 9 0 0 0 9 9"></path>
+      </svg>
+    );
+
+    const Navigation = ({ className, style }) => (
+      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+      </svg>
+    );
+
+    const CornerDownRight = ({ className, style }) => (
+      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="15 10 20 15 15 20"></polyline>
+        <path d="M4 4v7a4 4 0 0 0 4 4h12"></path>
+      </svg>
+    );
+
     const Layers = ({ className, style }) => (
       <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
@@ -75,9 +120,40 @@
     );
 
     const quizData = {
+      para1abs2: {
+        title: "Übung zu § 1 Abs. 2 StVO",
+        type: "quiz",
+        icon: BookOpen,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
+      para2: {
+        title: "Übung zu § 2 StVO",
+        type: "quiz",
+        icon: BookOpen,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
       para3: {
         title: "Übung zu § 3 StVO",
         type: "quiz",
+        icon: Gauge,
         questions: [
           {
             id: 1,
@@ -161,9 +237,85 @@
           }
         ]
       },
+      para4: {
+        title: "Übung zu § 4 StVO",
+        type: "quiz",
+        icon: MoveHorizontal,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
+      para5_6: {
+        title: "Übung zu § 5, § 6 StVO",
+        type: "quiz",
+        icon: ArrowRightLeft,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
+      para8: {
+        title: "Übung zu § 8 StVO",
+        type: "quiz",
+        icon: Navigation,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
+      para9: {
+        title: "Übung zu § 9 StVO",
+        type: "quiz",
+        icon: CornerDownRight,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
+      definitionen: {
+        title: "Übung Definitionen/Auslegungen",
+        type: "quiz",
+        icon: BookOpen,
+        questions: [
+          {
+            id: 1,
+            type: "single-choice",
+            question: "Platzhalter: Inhalt folgt",
+            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+            correctAnswer: "Option 1",
+            explanation: "Inhalte werden noch ergänzt"
+          }
+        ]
+      },
       tbnr_category: {
         title: "Übungen zu TBNR/BT-Kat-OWi/BKatV",
         type: "category",
+        icon: Layers,
         subcategories: {
           tbnr_geschwindigkeit: {
             title: "TBNR Geschwindigkeit",
@@ -242,90 +394,6 @@
             ]
           }
         }
-      },
-      para1abs2: {
-        title: "Übung zu § 1 Abs. 2 StVO",
-        type: "quiz",
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para2: {
-        title: "Übung zu § 2 StVO",
-        type: "quiz",
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para5_6: {
-        title: "Übung zu § 5, § 6 StVO",
-        type: "quiz",
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para8: {
-        title: "Übung zu § 8 StVO",
-        type: "quiz",
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para9: {
-        title: "Übung zu § 9 StVO",
-        type: "quiz",
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      definitionen: {
-        title: "Übung Definitionen/Auslegungen",
-        type: "quiz",
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
       }
     };
 
