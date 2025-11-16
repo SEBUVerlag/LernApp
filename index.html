@@ -142,12 +142,17 @@
         // --- Initiale Quizfragen (Lokale Quelle) ---
         const getInitialQuestionsData = () => {
              // FRAGEN BASIEREND AUF DER VORLAGE DES NUTZERS 
-             const cat1 = "Übung zu § 1 Abs. 2 StVO";
-             const cat2 = "Übung zu Höchstgeschwindigkeiten";
+             const cat1 = "§ 1 Abs. 2 StVO"; 
+             const cat2 = "Höchstgeschwindigkeit"; 
+             const cat3 = "TBNR Abstand"; 
+             const cat4 = "TBNR/BKatV"; 
              
              // Standardisierter Fragesatz und Hinweis für TEXT-Fragen
              const prefix = "Bestimmen Sie die zulässige Höchstgeschwindigkeit für ";
              const suffix = ". Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.";
+
+             // *** NEU: TBNR Präfix ***
+             const tbnrPrefix = "Bestimme die TBNR für ";
 
             return [
                 // === KATEGORIE 1: Übung zu § 1 Abs. 2 StVO (5 Fragen) ===
@@ -242,16 +247,16 @@
                 { 
                     category: cat2, 
                     type: 'TEXT', 
-                    text: `${prefix}KOM stehende Fahrgäste igO${suffix}`, // KORRIGIERT: ego -> igO
+                    text: `${prefix}KOM stehende Fahrgäste igO${suffix}`, 
                     correctAnswer: "60", 
-                    explanation: "" // KEIN HINWEIS WURDE VOM NUTZER FÜR DIESE FRAGE EXPLIZIT GEGEBEN.
+                    explanation: "" 
                 },
                 { 
                     category: cat2, 
                     type: 'TEXT', 
                     text: `${prefix}Pkw auf BAB${suffix}`, 
                     correctAnswer: "0", 
-                    explanation: "Hinweis: Die Autobahnrichtgeschwindigkeitsverordnung (130 km/h) ist lediglich Empfehlung" // WORDWÖRTLICH ÜBERNOMMEN
+                    explanation: "Hinweis: Die Autobahnrichtgeschwindigkeitsverordnung (130 km/h) ist lediglich Empfehlung" 
                 },
                 { 
                     category: cat2, 
@@ -265,14 +270,14 @@
                     type: 'TEXT', 
                     text: `${prefix}Lkw 36 t bei Z 274-70 agO${suffix}`, 
                     correctAnswer: "60", 
-                    explanation: "Beachte Z. 274-70 Nr. 3 StVO, wonach die Geschwindigkeit aus § 3 Abs. 3 Nr. 2 lit. b sublit. aa StVO bestehen bleibt." // WORDWÖRTLICH ÜBERNOMMEN
+                    explanation: "Beachte Z. 274-70 Nr. 3 StVO, wonach die Geschwindigkeit aus § 3 Abs. 3 Nr. 2 lit. b sublit. aa StVO bestehen bleibt." 
                 },
                 { 
                     category: cat2, 
                     type: 'TEXT', 
                     text: `${prefix}Wohnmobil 4,2 t igO Zweirichtungsverkehr mit jeweils zwei Fahrstreifen pro Richtung${suffix}`, 
                     correctAnswer: "80", 
-                    explanation: "Beachte § 3 Abs. 3 Nr. 2 lit. c S. 2 StVO" // WORDWÖRTLICH ÜBERNOMMEN
+                    explanation: "Beachte § 3 Abs. 3 Nr. 2 lit. c S. 2 StVO" 
                 },
                 { 
                     category: cat2, 
@@ -293,7 +298,60 @@
                     type: 'TEXT', 
                     text: `${prefix}Pkw/Anhänger auf BAB${suffix}`, 
                     correctAnswer: "100", 
-                    explanation: "Beachte 9. StVOAusnV 9" // WORDWÖRTLICH ÜBERNOMMEN
+                    explanation: "Beachte 9. StVOAusnV 9" 
+                },
+
+                // === KATEGORIE 3: Übungen zu TBNR Abstand (1 Frage) ===
+                {
+                    category: cat3, 
+                    type: 'TEXT',
+                    text: `${tbnrPrefix}Pkw, agO, Zweirichtungsverkehr, jeweils zwei Fahrstreifen, V=100 km/h, s=40 m`, 
+                    correctAnswer: "104100", 
+                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
+                },
+
+                // === KATEGORIE 4: NEU: TBNR/BKatV (3 Fragen) ===
+                // 1. Frage: Bedeutung 1. Ziffer
+                 {
+                    category: cat4,
+                    type: 'SC',
+                    text: "Wofür steht die 1. Ziffer der TBNR?",
+                    options: [
+                        "Paragraf aus der jeweiligen Verordnung", 
+                        "Verordnung", // Korrekt: Verordnung
+                        "Geldbetrag",
+                        "Schlüsselnummer des Verstoßes"
+                    ],
+                    correctIndex: 1, 
+                    explanation: "" 
+                },
+                // 2. Frage: Bedeutung 2. und 3. Ziffer
+                {
+                    category: cat4,
+                    type: 'SC',
+                    text: "Wofür stehen die 2. und 3. Ziffer der TBNR?",
+                    options: [
+                        "Paragraf aus der jeweiligen Verordnung", // Korrekt: Paragraf
+                        "Verordnung",
+                        "Geldbetrag",
+                        "Schlüsselnummer des Verstoßes"
+                    ],
+                    correctIndex: 0, 
+                    explanation: "" 
+                },
+                // 3. Frage: Bedeutung 4.-6. Ziffer
+                {
+                    category: cat4,
+                    type: 'SC',
+                    text: "Wofür stehen die 4. bis 6. Ziffer der TBNR?",
+                    options: [
+                        "Paragraf aus der jeweiligen Verordnung", 
+                        "Verordnung",
+                        "Geldbetrag",
+                        "Schlüsselnummer des Verstoßes" // Korrekt: Schlüsselnummer
+                    ],
+                    correctIndex: 3, 
+                    explanation: "" 
                 },
             ];
         };
@@ -391,7 +449,7 @@
         const shuffleArray = (array) => {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[i], array[j]];
+                [array[i], array[j]] = [array[j], array[i]];
             }
             return array;
         };
@@ -420,7 +478,6 @@
         // --- TEXT Input Validierung (Nur erlaubte Zahlen) ---
         const validateTextInput = (value) => {
             // Die erlaubten Antworten im Quiz
-            const validValues = ["0", "50", "60", "80", "100", "120"];
             const inputField = document.getElementById('text-answer-input');
             const checkButton = document.getElementById('check-answer-button');
             const feedbackDiv = document.getElementById('text-input-feedback');
@@ -429,16 +486,37 @@
             if (trimmedValue === "") {
                 if (checkButton) checkButton.disabled = true;
                 if (feedbackDiv) feedbackDiv.classList.add('hidden');
+                if (inputField) inputField.classList.remove('border-red-500'); 
                 return false;
             }
             
-            if (!validValues.includes(trimmedValue)) {
+            // Dynamische Logik für TEXT-Fragen
+            const question = currentQuizQuestions[currentQuestionIndex];
+            let isValid = false;
+            let feedbackText = ""; 
+
+            if (question.category === "TBNR Abstand") { // TBNR
+                isValid = /^\d{6}$/.test(trimmedValue); // Muss 6 Ziffern sein
+                feedbackText = "TBNR muss eine 6-stellige Zahl sein.";
+            } else if (question.category === "Höchstgeschwindigkeit") { // Geschwindigkeit
+                const validValues = ["0", "50", "60", "80", "100", "120"];
+                isValid = validValues.includes(trimmedValue);
+                feedbackText = "Nur die Zahlen 0, 50, 60, 80, 100 oder 120 sind erlaubt.";
+            } else {
+                // Fallback, falls andere TEXT-Fragen existieren
+                isValid = true; 
+            }
+            
+            if (!isValid) {
                 if (checkButton) checkButton.disabled = true;
                 if (inputField) inputField.classList.add('border-red-500');
-                if (feedbackDiv) feedbackDiv.classList.remove('hidden');
+                if (feedbackDiv) {
+                    feedbackDiv.textContent = feedbackText; // Dynamisches Feedback
+                    feedbackDiv.classList.remove('hidden');
+                }
                 return false;
             }
-        
+            
             if (checkButton) checkButton.disabled = false;
             if (inputField) inputField.classList.remove('border-red-500');
             if (feedbackDiv) feedbackDiv.classList.add('hidden');
@@ -454,7 +532,7 @@
 
             const question = currentQuizQuestions[currentQuestionIndex];
             const isMC = question.type === 'MC'; 
-            const isTEXT = question.type === 'TEXT'; // Neuer Typ
+            const isTEXT = question.type === 'TEXT'; 
             
             elements.questionText.textContent = `Frage ${currentQuestionIndex + 1}/${currentQuizQuestions.length}: ${question.text}`;
             elements.optionsContainer.innerHTML = '';
@@ -483,7 +561,7 @@
                 checkButton.classList.remove('hidden');
                 elements.nextButton.classList.add('hidden'); 
                 checkButton.disabled = true; 
-                checkButton.onclick = isMC ? checkMCAnswer : checkTextAnswer; // Dynamische Zuweisung des Handlers
+                checkButton.onclick = isMC ? checkMCAnswer : checkTextAnswer; 
                 elements.optionsContainer.className = isMC ? 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-8' : 'flex justify-center mb-8';
 
             } else { // SC-Fragen
@@ -494,13 +572,28 @@
 
 
             if (isTEXT) {
-                // Anzeigevorlage für Freitext-Eingabe (mit erlaubten Werten im Placeholder)
+                // Dynamischer Placeholder und Typ für TEXT-Fragen
+                let placeholder = "Zahl eingeben";
+                let feedbackText = "Ungültige Eingabe.";
+                let inputType = "number"; // Standard
+
+                if (question.category === "TBNR Abstand") { // TBNR
+                    placeholder = "TBNR (6 Ziffern)";
+                    feedbackText = "TBNR muss eine 6-stellige Zahl sein.";
+                    inputType = "text"; 
+                } else if (question.category === "Höchstgeschwindigkeit") { // Geschwindigkeit
+                    placeholder = "Geschw. in km/h";
+                    feedbackText = "Nur die Zahlen 0, 50, 60, 80, 100 oder 120 sind erlaubt.";
+                    inputType = "number";
+                }
+
+                // Anzeigevorlage für Freitext-Eingabe
                 elements.optionsContainer.innerHTML = `
                     <div class="w-full max-w-sm">
-                        <input type="number" id="text-answer-input" placeholder="Geschw. in km/h"
+                        <input type="${inputType}" id="text-answer-input" placeholder="${placeholder}"
                                class="w-full p-4 border-2 border-gray-300 rounded-lg text-lg text-center focus:border-cd-primary focus:ring-cd-primary"
-                               min="0" oninput="validateTextInput(this.value)">
-                        <div id="text-input-feedback" class="mt-2 text-sm text-red-500 hidden">Nur die Zahlen 0, 50, 60, 80, 100 oder 120 sind erlaubt.</div>
+                               ${inputType === 'number' ? 'min="0"' : ''} oninput="validateTextInput(this.value)">
+                        <div id="text-input-feedback" class="mt-2 text-sm text-red-500 hidden">${feedbackText}</div>
                     </div>
                 `;
             } else {
@@ -649,7 +742,14 @@
                 
                 // Erklärung für Falsche Antworten
                 if (currentQuestion.type === 'TEXT') {
-                     let explanationHtml = `**Falsch.** Die zulässige Höchstgeschwindigkeit beträgt: ${currentQuestion.correctAnswer} km/h.`;
+                     // Dynamisches Feedback für TEXT-Fragen
+                     let explanationHtml = `**Falsch.** Die korrekte Antwort lautet: ${currentQuestion.correctAnswer}`;
+                     if (currentQuestion.category === "Höchstgeschwindigkeit") { 
+                         explanationHtml = `**Falsch.** Die zulässige Höchstgeschwindigkeit beträgt: ${currentQuestion.correctAnswer} km/h.`;
+                     } else if (currentQuestion.category === "TBNR Abstand") { 
+                         explanationHtml = `**Falsch.** Die korrekte TBNR lautet: ${currentQuestion.correctAnswer}.`;
+                     }
+                     
                      if (currentQuestion.explanation) {
                          // Fügt den wortwörtlichen Hinweis des Nutzers hinzu
                          explanationHtml += `<br>**Hinweis:** ${currentQuestion.explanation}`;
