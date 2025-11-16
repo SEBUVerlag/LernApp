@@ -1,787 +1,694 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEBU Lern-App - Verkehrsrecht/Verkehrslehre</title>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBU Lern-App Verkehrsrecht/Verkehrslehre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Definition der Verlagsfarbe #823125 als 'cd-primary'
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cd-primary': '#823125', // Die gewünschte Hauptfarbe
+                        'cd-hover': '#6e1d11',  // Eine etwas dunklere Variante für den Hover-Effekt
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Konfigurieren der Inter-Schriftart */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+        }
+        .container-card {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+        }
+        .option-button, .category-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .option-button:hover:not(.correct):not(.incorrect) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .category-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(100, 100, 100, 0.2);
+            border-color: #823125; /* CD Farbe als Hover-Rand */
+        }
+        /* Korrekte und Falsche Antworten Visualisierung */
+        .correct {
+            background-color: #4ade80 !important;
+            color: white !important;
+            border-color: #15803d !important;
+        }
+        .incorrect {
+            background-color: #f87171 !important;
+            color: white !important;
+            border-color: #b91c1c !important;
+        }
+        /* Styling für ausgewählte MC-Optionen */
+        .selected-mc {
+            background-color: #823125 !important;
+            color: white !important;
+            border-color: #6e1d11 !important;
+        }
+        /* Styling für Freitexteingabe */
+        input.correct {
+            background-color: #d1fae5 !important; /* light green */
+            border-color: #34d399 !important;
+        }
+        input.incorrect {
+            background-color: #fee2e2 !important; /* light red */
+            border-color: #f87171 !important;
+        }
+    </style>
 </head>
-<body>
-  <div id="root"></div>
-  
-  <script type="text/babel">
-    const { useState } = React;
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    // Lucide React Icons als einfache SVG-Komponenten
-    const BookOpen = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-      </svg>
-    );
+    <!-- Hauptcontainer für die App -->
+    <div id="app-container" class="container-card w-full bg-white rounded-xl p-6 md:p-10 transition-all duration-300">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">SEBU Lern-App Verkehrsrecht/Verkehrslehre</h1>
+        <p class="text-gray-500 mb-6" id="app-subtitle">Wähle eine Übungskategorie, um zu starten.</p>
 
-    const Award = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="8" r="7"></circle>
-        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-      </svg>
-    );
-
-    const CheckCircle = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
-    );
-
-    const XCircle = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <line x1="15" y1="9" x2="9" y2="15"></line>
-        <line x1="9" y1="9" x2="15" y2="15"></line>
-      </svg>
-    );
-
-    const RefreshCw = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="23 4 23 10 17 10"></polyline>
-        <polyline points="1 20 1 14 7 14"></polyline>
-        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-      </svg>
-    );
-
-    const ChevronRight = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    );
-
-    const Gauge = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m12 14 4-4"></path>
-        <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
-      </svg>
-    );
-
-    const MoveHorizontal = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="18 8 22 12 18 16"></polyline>
-        <polyline points="6 8 2 12 6 16"></polyline>
-        <line x1="2" y1="12" x2="22" y2="12"></line>
-      </svg>
-    );
-
-    const ArrowRightLeft = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m16 3 4 4-4 4"></path>
-        <path d="M20 7H4"></path>
-        <path d="m8 21-4-4 4-4"></path>
-        <path d="M4 17h16"></path>
-      </svg>
-    );
-
-    const GitMerge = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="18" cy="18" r="3"></circle>
-        <circle cx="6" cy="6" r="3"></circle>
-        <path d="M6 21V9a9 9 0 0 0 9 9"></path>
-      </svg>
-    );
-
-    const Navigation = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
-      </svg>
-    );
-
-    const CornerDownRight = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="15 10 20 15 15 20"></polyline>
-        <path d="M4 4v7a4 4 0 0 0 4 4h12"></path>
-      </svg>
-    );
-
-    const Layers = ({ className, style }) => (
-      <svg className={className} style={style} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-        <polyline points="2 17 12 22 22 17"></polyline>
-        <polyline points="2 12 12 17 22 12"></polyline>
-      </svg>
-    );
-
-    const quizData = {
-      para1abs2: {
-        title: "Übung zu § 1 Abs. 2 StVO",
-        type: "quiz",
-        icon: BookOpen,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para2: {
-        title: "Übung zu § 2 StVO",
-        type: "quiz",
-        icon: BookOpen,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para3: {
-        title: "Übung zu § 3 StVO",
-        type: "quiz",
-        icon: Gauge,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Pkw i.g.O. (innerhalb geschlossener Ortschaften)?",
-            options: ["30 km/h", "50 km/h", "60 km/h", "70 km/h"],
-            correctAnswer: "50 km/h",
-            explanation: "Pkw innerhalb geschlossener Ortschaften: 50 km/h"
-          },
-          {
-            id: 2,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Lkw 12 t/Anhänger a.g.O. (außerhalb geschlossener Ortschaften)?",
-            options: ["50 km/h", "60 km/h", "80 km/h", "100 km/h"],
-            correctAnswer: "60 km/h",
-            explanation: "Lkw mit Anhänger außerhalb geschlossener Ortschaften: 60 km/h"
-          },
-          {
-            id: 3,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Krad a.g.O. (außerhalb geschlossener Ortschaften)?",
-            options: ["80 km/h", "100 km/h", "120 km/h", "130 km/h"],
-            correctAnswer: "100 km/h",
-            explanation: "Kraftrad außerhalb geschlossener Ortschaften: 100 km/h"
-          },
-          {
-            id: 4,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für KOM mit stehenden Fahrgästen a.g.O. (außerhalb geschlossener Ortschaften)?",
-            options: ["50 km/h", "60 km/h", "80 km/h", "100 km/h"],
-            correctAnswer: "60 km/h",
-            explanation: "Kraftomnibusse mit stehenden Fahrgästen außerhalb geschlossener Ortschaften: 60 km/h"
-          },
-          {
-            id: 5,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Wohnmobil 4,8 t, a.g.O. (außerhalb geschlossener Ortschaften)?",
-            options: ["60 km/h", "80 km/h", "100 km/h", "120 km/h"],
-            correctAnswer: "80 km/h",
-            explanation: "Wohnmobil über 3,5 t bis 7,5 t außerhalb geschlossener Ortschaften: 80 km/h"
-          },
-          {
-            id: 6,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Pkw auf der BAB (Bundesautobahn)?",
-            options: ["100 km/h", "130 km/h", "150 km/h", "keine Begrenzung"],
-            correctAnswer: "keine Begrenzung",
-            explanation: "Pkw auf Autobahnen: keine generelle Höchstgeschwindigkeitsbegrenzung (Richtgeschwindigkeit 130 km/h)"
-          },
-          {
-            id: 7,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Lkw 34 t auf der BAB (Bundesautobahn)?",
-            options: ["60 km/h", "80 km/h", "100 km/h", "120 km/h"],
-            correctAnswer: "80 km/h",
-            explanation: "Lkw über 3,5 t auf Autobahnen: 80 km/h"
-          },
-          {
-            id: 8,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Pkw/Anhänger auf der BAB (Bundesautobahn)?",
-            options: ["80 km/h", "100 km/h", "120 km/h", "130 km/h"],
-            correctAnswer: "100 km/h",
-            explanation: "Pkw mit Anhänger auf Autobahnen: 100 km/h"
-          },
-          {
-            id: 9,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Krad auf der BAB (Bundesautobahn)?",
-            options: ["100 km/h", "130 km/h", "150 km/h", "keine Begrenzung"],
-            correctAnswer: "keine Begrenzung",
-            explanation: "Kraftrad auf Autobahnen: keine generelle Höchstgeschwindigkeitsbegrenzung"
-          },
-          {
-            id: 10,
-            type: "single-choice",
-            question: "Wie hoch ist die zulässige Höchstgeschwindigkeit für Wohnmobil 4,8 t/Anhänger?",
-            options: ["50 km/h", "60 km/h", "80 km/h", "100 km/h"],
-            correctAnswer: "60 km/h",
-            explanation: "Wohnmobil über 3,5 t mit Anhänger: 60 km/h"
-          }
-        ]
-      },
-      para4: {
-        title: "Übung zu § 4 StVO",
-        type: "quiz",
-        icon: MoveHorizontal,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para5_6: {
-        title: "Übung zu § 5, § 6 StVO",
-        type: "quiz",
-        icon: ArrowRightLeft,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para8: {
-        title: "Übung zu § 8 StVO",
-        type: "quiz",
-        icon: Navigation,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      para9: {
-        title: "Übung zu § 9 StVO",
-        type: "quiz",
-        icon: CornerDownRight,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      definitionen: {
-        title: "Übung Definitionen/Auslegungen",
-        type: "quiz",
-        icon: BookOpen,
-        questions: [
-          {
-            id: 1,
-            type: "single-choice",
-            question: "Platzhalter: Inhalt folgt",
-            options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-            correctAnswer: "Option 1",
-            explanation: "Inhalte werden noch ergänzt"
-          }
-        ]
-      },
-      tbnr_category: {
-        title: "Übungen zu TBNR/BT-Kat-OWi/BKatV",
-        type: "category",
-        icon: Layers,
-        subcategories: {
-          tbnr_geschwindigkeit: {
-            title: "TBNR Geschwindigkeit",
-            questions: [
-              {
-                id: 1,
-                type: "tbnr-input",
-                question: "Platzhalter: Inhalt folgt",
-                correctAnswer: "000000",
-                explanation: "Inhalte werden noch ergänzt"
-              }
-            ]
-          },
-          tbnr_abstand: {
-            title: "TBNR Abstand",
-            questions: [
-              {
-                id: 1,
-                type: "tbnr-input",
-                question: "Pkw, 80 km/h, Abstand 35 m",
-                correctAnswer: "104100",
-                explanation: "TBNR 104100: Pkw bei 80 km/h mit weniger als 5/10 des halben Tachowertes Abstand (weniger als 40 m)"
-              },
-              {
-                id: 2,
-                type: "tbnr-input",
-                question: "Lkw, 12 t, 80 km/h auf BAB, Abstand 40 m",
-                correctAnswer: "104636",
-                explanation: "TBNR 104636: Lkw über 3,5 t auf BAB bei 80 km/h mit weniger als 5/10 des halben Tachowertes Abstand"
-              },
-              {
-                id: 3,
-                type: "tbnr-input",
-                question: "Wohnmobil/Anhänger, 4,8 t, 60 km/h, a.g.O., Zweirichtungsverkehr mit jeweils einem Fahrstreifen pro Richtung, Abstand 50 m",
-                correctAnswer: "104104",
-                explanation: "TBNR 104104: Fahrzeug mit Anhänger bei mehr als 50 km/h, Abstand weniger als 50 m"
-              },
-              {
-                id: 4,
-                type: "tbnr-input",
-                question: "Pkw, 180 km/h auf BAB, Abstand 35 m",
-                correctAnswer: "104613",
-                explanation: "TBNR 104613: Pkw bei mehr als 130 km/h mit weniger als 5/10 des halben Tachowertes Abstand (unter 80 m bei 130+ km/h)"
-              },
-              {
-                id: 5,
-                type: "tbnr-input",
-                question: "Krad, 100 km/h, a.g.O., Zweirichtungsverkehr mit jeweils zwei Fahrstreifen pro Richtung, Abstand 12 m",
-                correctAnswer: "104602",
-                explanation: "TBNR 104602: Kraftrad bei mehr als 80 km/h mit weniger als 4/10 des halben Tachowertes Abstand"
-              }
-            ]
-          },
-          tbnr_ueberholen: {
-            title: "TBNR Überholen",
-            questions: [
-              {
-                id: 1,
-                type: "tbnr-input",
-                question: "Platzhalter: Inhalt folgt",
-                correctAnswer: "000000",
-                explanation: "Inhalte werden noch ergänzt"
-              }
-            ]
-          },
-          tbnr_sonstiges: {
-            title: "TBNR Sonstiges",
-            questions: [
-              {
-                id: 1,
-                type: "tbnr-input",
-                question: "Platzhalter: Inhalt folgt",
-                correctAnswer: "000000",
-                explanation: "Inhalte werden noch ergänzt"
-              }
-            ]
-          }
-        }
-      }
-    };
-
-    function App() {
-      const [currentView, setCurrentView] = useState('home');
-      const [selectedCategory, setSelectedCategory] = useState(null);
-      const [selectedTopic, setSelectedTopic] = useState(null);
-      const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-      const [userAnswer, setUserAnswer] = useState('');
-      const [showFeedback, setShowFeedback] = useState(false);
-      const [isCorrect, setIsCorrect] = useState(false);
-      const [results, setResults] = useState([]);
-      const [quizCompleted, setQuizCompleted] = useState(false);
-
-      const startQuiz = (topicKey) => {
-        const topic = selectedCategory 
-          ? quizData[selectedCategory].subcategories[topicKey]
-          : quizData[topicKey];
-        
-        setSelectedTopic(topicKey);
-        setCurrentView('quiz');
-        setCurrentQuestionIndex(0);
-        setUserAnswer('');
-        setShowFeedback(false);
-        setResults([]);
-        setQuizCompleted(false);
-      };
-
-      const openCategory = (categoryKey) => {
-        setSelectedCategory(categoryKey);
-        setCurrentView('category');
-      };
-
-      const checkAnswer = () => {
-        const topic = selectedCategory 
-          ? quizData[selectedCategory].subcategories[selectedTopic]
-          : quizData[selectedTopic];
-        const question = topic.questions[currentQuestionIndex];
-        let correct = false;
-
-        if (question.type === 'single-choice') {
-          correct = userAnswer === question.correctAnswer;
-        } else if (question.type === 'tbnr-input') {
-          correct = userAnswer.trim() === question.correctAnswer;
-        }
-
-        setIsCorrect(correct);
-        setShowFeedback(true);
-        setResults([...results, { questionId: question.id, correct }]);
-      };
-
-      const nextQuestion = () => {
-        const topic = selectedCategory 
-          ? quizData[selectedCategory].subcategories[selectedTopic]
-          : quizData[selectedTopic];
-        const questions = topic.questions;
-        
-        if (currentQuestionIndex < questions.length - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
-          setUserAnswer('');
-          setShowFeedback(false);
-        } else {
-          setQuizCompleted(true);
-        }
-      };
-
-      const resetToHome = () => {
-        setCurrentView('home');
-        setSelectedCategory(null);
-        setSelectedTopic(null);
-        setCurrentQuestionIndex(0);
-        setUserAnswer('');
-        setShowFeedback(false);
-        setResults([]);
-        setQuizCompleted(false);
-      };
-
-      const backToCategory = () => {
-        setCurrentView('category');
-        setSelectedTopic(null);
-        setCurrentQuestionIndex(0);
-        setUserAnswer('');
-        setShowFeedback(false);
-        setResults([]);
-        setQuizCompleted(false);
-      };
-
-      if (currentView === 'home') {
-        return (
-          <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 p-4">
-            <div className="max-w-6xl mx-auto pt-8">
-              <div className="text-center mb-12">
-                <BookOpen className="w-16 h-16 mx-auto mb-4" style={{ color: '#823125' }} />
-                <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                  SEBU Lern-App<br />Verkehrsrecht/<br />Verkehrslehre
-                </h1>
-                <p className="text-gray-600">Wähle ein Thema und teste dein Wissen!</p>
-              </div>
-              
-              <div className="grid md:grid-cols-3 gap-6">
-                {Object.entries(quizData).map(([key, topic]) => {
-                  const isCategory = topic.type === 'category';
-                  const Icon = isCategory ? Layers : BookOpen;
-                  const questionCount = isCategory 
-                    ? Object.values(topic.subcategories).reduce((sum, sub) => sum + sub.questions.length, 0)
-                    : topic.questions.length;
-
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => isCategory ? openCategory(key) : startQuiz(key)}
-                      className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all transform hover:-translate-y-1 relative"
-                    >
-                      <div className="text-center">
-                        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#82312520' }}>
-                          <Icon className="w-8 h-8" style={{ color: '#823125' }} />
-                        </div>
-                        <h2 className="text-lg font-semibold text-gray-800 mb-2">{topic.title}</h2>
-                        <p className="text-gray-600 text-sm">
-                          {isCategory 
-                            ? `${Object.keys(topic.subcategories).length} Unterthemen`
-                            : `${questionCount} Fragen`
-                          }
-                        </p>
-                        {isCategory && (
-                          <ChevronRight className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      if (currentView === 'category') {
-        const category = quizData[selectedCategory];
-        
-        return (
-          <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 p-4">
-            <div className="max-w-4xl mx-auto pt-8">
-              <div className="mb-6">
-                <button
-                  onClick={resetToHome}
-                  className="font-medium"
-                  style={{ color: '#823125' }}
-                >
-                  ← Zurück zur Startseite
-                </button>
-              </div>
-
-              <div className="text-center mb-12">
-                <Layers className="w-16 h-16 mx-auto mb-4" style={{ color: '#823125' }} />
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">{category.title}</h2>
-                <p className="text-gray-600">Wähle eine Übung aus</p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                {Object.entries(category.subcategories).map(([key, subtopic]) => (
-                  <button
-                    key={key}
-                    onClick={() => startQuiz(key)}
-                    className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all transform hover:-translate-y-1"
-                  >
-                    <div className="text-center">
-                      <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#82312520' }}>
-                        <BookOpen className="w-8 h-8" style={{ color: '#823125' }} />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-800 mb-2">{subtopic.title}</h3>
-                      <p className="text-gray-600 text-sm">{subtopic.questions.length} Fragen</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      const currentTopicData = selectedCategory 
-        ? quizData[selectedCategory].subcategories[selectedTopic]
-        : quizData[selectedTopic];
-      const currentQuestion = currentTopicData.questions[currentQuestionIndex];
-      const correctAnswers = results.filter(r => r.correct).length;
-      const totalQuestions = currentTopicData.questions.length;
-
-      if (quizCompleted) {
-        const percentage = Math.round((correctAnswers / totalQuestions) * 100);
-        
-        return (
-          <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 p-4">
-            <div className="max-w-2xl mx-auto pt-12">
-              <div className="bg-white rounded-xl shadow-xl p-8 text-center">
-                <Award className="w-20 h-20 mx-auto mb-6 text-yellow-500" />
-                <h2 className="text-3xl font-bold text-gray-800 mb-4">Quiz abgeschlossen!</h2>
-                
-                <div className="mb-8">
-                  <div className="text-6xl font-bold mb-2" style={{ color: '#823125' }}>{percentage}%</div>
-                  <p className="text-gray-600 text-lg">
-                    {correctAnswers} von {totalQuestions} Fragen richtig beantwortet
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                  <h3 className="font-semibold text-gray-800 mb-4">Deine Ergebnisse:</h3>
-                  <div className="space-y-2">
-                    {results.map((result, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <span className="text-gray-700">Frage {index + 1}</span>
-                        {result.correct ? (
-                          <CheckCircle className="w-6 h-6 text-green-500" />
-                        ) : (
-                          <XCircle className="w-6 h-6 text-red-500" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex gap-4 justify-center flex-wrap">
-                  <button
-                    onClick={() => startQuiz(selectedTopic)}
-                    className="flex items-center gap-2 text-white px-6 py-3 rounded-lg transition-colors"
-                    style={{ backgroundColor: '#823125' }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#6b2820'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#823125'}
-                  >
-                    <RefreshCw className="w-5 h-5" />
-                    Nochmal üben
-                  </button>
-                  {selectedCategory && (
-                    <button
-                      onClick={backToCategory}
-                      className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
-                    >
-                      Andere Übung
-                    </button>
-                  )}
-                  <button
-                    onClick={resetToHome}
-                    className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors"
-                  >
-                    Zur Startseite
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 p-4">
-          <div className="max-w-2xl mx-auto pt-8">
-            <div className="mb-6 flex justify-between items-center">
-              <button
-                onClick={selectedCategory ? backToCategory : resetToHome}
-                className="font-medium"
-                style={{ color: '#823125' }}
-              >
-                ← Zurück {selectedCategory ? 'zur Übersicht' : 'zur Startseite'}
-              </button>
-              <div className="text-gray-600 font-medium">
-                Frage {currentQuestionIndex + 1} von {totalQuestions}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl shadow-xl p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">{currentTopicData.title}</h2>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-8">
-                <div
-                  className="h-2 rounded-full transition-all"
-                  style={{ 
-                    width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%`,
-                    backgroundColor: '#823125'
-                  }}
-                ></div>
-              </div>
-
-              <div className="mb-8">
-                <p className="text-lg text-gray-700 mb-6">{currentQuestion.question}</p>
-
-                {currentQuestion.type === 'single-choice' ? (
-                  <div className="space-y-3">
-                    {currentQuestion.options.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => setUserAnswer(option)}
-                        disabled={showFeedback}
-                        className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                          userAnswer === option
-                            ? 'bg-red-50'
-                            : 'border-gray-200 hover:border-red-300'
-                        } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                        style={userAnswer === option ? { borderColor: '#823125' } : {}}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                ) : currentQuestion.type === 'tbnr-input' ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={userAnswer}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (/^\d{0,6}$/.test(value)) {
-                          setUserAnswer(value);
-                        }
-                      }}
-                      disabled={showFeedback}
-                      placeholder="6-stellige TBNR eingeben..."
-                      maxLength="6"
-                      className="w-full p-4 border-2 border-gray-200 rounded-lg focus:outline-none text-center text-2xl font-mono tracking-wider"
-                      style={userAnswer && userAnswer.length === 6 ? { borderColor: '#823125' } : {}}
-                    />
-                    <p className="text-sm text-gray-500 mt-2 text-center">
-                      {userAnswer.length}/6 Ziffern
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-
-              {showFeedback && (
-                <div className={`mb-6 p-4 rounded-lg ${isCorrect ? 'bg-green-50' : 'bg-red-50'}`}>
-                  <div className="flex items-start gap-3">
-                    {isCorrect ? (
-                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                    ) : (
-                      <XCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
-                    )}
-                    <div>
-                      <p className={`font-semibold mb-2 ${isCorrect ? 'text-green-800' : 'text-red-800'}`}>
-                        {isCorrect ? '✅ Richtig!' : 'Leider falsch!'}
-                      </p>
-                      <p className="text-gray-700">{currentQuestion.explanation}</p>
-                      {!isCorrect && currentQuestion.type === 'single-choice' && (
-                        <p className="text-gray-700 mt-2">
-                          Richtige Antwort: <strong>{currentQuestion.correctAnswer}</strong>
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex justify-end">
-                {!showFeedback ? (
-                  <button
-                    onClick={checkAnswer}
-                    disabled={currentQuestion.type === 'tbnr-input' ? userAnswer.length !== 6 : !userAnswer}
-                    className="text-white px-8 py-3 rounded-lg transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: 
-                      (currentQuestion.type === 'tbnr-input' ? userAnswer.length === 6 : userAnswer) ? '#823125' : '' 
-                    }}
-                    onMouseEnter={(e) => { 
-                      if ((currentQuestion.type === 'tbnr-input' ? userAnswer.length === 6 : userAnswer)) 
-                        e.target.style.backgroundColor = '#6b2820'; 
-                    }}
-                    onMouseLeave={(e) => { 
-                      if ((currentQuestion.type === 'tbnr-input' ? userAnswer.length === 6 : userAnswer)) 
-                        e.target.style.backgroundColor = '#823125'; 
-                    }}
-                  >
-                    Antwort prüfen
-                  </button>
-                ) : (
-                  <button
-                    onClick={nextQuestion}
-                    className="text-white px-8 py-3 rounded-lg transition-colors"
-                    style={{ backgroundColor: '#823125' }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#6b2820'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#823125'}
-                  >
-                    {currentQuestionIndex < totalQuestions - 1 ? 'Nächste Frage' : 'Ergebnisse anzeigen'}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+        <!-- Status-Anzeige (Nur aktuelle Punktzahl) -->
+        <div class="flex justify-end items-center mb-6 text-sm">
+            <span class="text-gray-600">Aktuelle Punktzahl: <span id="current-score" class="font-semibold text-cd-primary">0</span></span>
         </div>
-      );
-    }
 
-    ReactDOM.render(<App />, document.getElementById('root'));
-  </script>
+        <!-- 1. Kategorieauswahl-Bereich -->
+        <div id="category-selection" class="">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Wähle eine Kategorie:</h2>
+            <div id="category-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Kategorien werden hier per JavaScript eingefügt -->
+            </div>
+        </div>
+
+        <!-- 2. Quiz-Bereich -->
+        <div id="quiz-area" class="hidden">
+            <!-- Frage -->
+            <div id="question-box" class="bg-gray-100 border-l-4 border-cd-primary p-6 mb-8 rounded-lg">
+                <p id="question-text" class="text-xl font-medium text-gray-800">Frage wird geladen...</p>
+                <div id="explanation-text" class="mt-4 hidden text-sm text-gray-600 border-t border-gray-300 pt-2"></div>
+            </div>
+
+            <!-- Antwort-Optionen / Text Input -->
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <!-- Buttons oder Input-Feld werden hier per JavaScript eingefügt -->
+            </div>
+
+            <!-- Feedback und Weiter-Button -->
+            <div id="feedback-area" class="min-h-[60px] flex items-center justify-between">
+                <div id="feedback-message" class="text-lg font-semibold"></div>
+                <!-- Der Check-Button für MC/TEXT wird dynamisch per JS hinzugefügt/angezeigt -->
+                <button id="next-button" disabled
+                    class="bg-cd-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-cd-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    Nächste Frage
+                </button>
+            </div>
+            <button id="back-to-categories-quiz"
+                    class="mt-4 text-sm text-gray-500 hover:text-cd-primary transition-colors">
+                Zurück zur Kategorieauswahl
+            </button>
+        </div>
+
+        <!-- 3. Endergebnis-Bereich -->
+        <div id="result-area" class="hidden text-center p-10 bg-green-50 rounded-xl">
+            <h2 class="text-2xl font-bold text-green-700 mb-4">Quiz beendet!</h2>
+            <p class="text-xl text-gray-700 mb-6">Du hast <span id="final-score" class="font-extrabold text-green-900">0</span> von <span id="total-questions" class="font-extrabold text-green-900">0</span> Fragen korrekt beantwortet.</p>
+            <button id="restart-button"
+                class="bg-cd-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-cd-hover transition-colors">
+                Neues Quiz starten
+            </button>
+        </div>
+    </div>
+
+    <!-- Entferne Firebase SDKs importieren Block, da die App jetzt rein lokal ist. -->
+    <script>
+        // --- Globale Variablen ---
+        let allQuestions = []; // Alle Fragen aus der lokalen Quelle
+        let currentQuizQuestions = []; // Fragen für das aktuelle Quiz
+        let currentQuestionIndex = 0;
+        let currentScore = 0;
+        let isQuestionActive = true;
+        let selectedMCIndices = []; // Speichert die ausgewählten Indizes für MC-Fragen
+        
+        // --- Initiale Quizfragen (Lokale Quelle) ---
+        const getInitialQuestionsData = () => {
+             // FRAGEN BASIEREND AUF DER VORLAGE DES NUTZERS 
+             const cat1 = "Übung zu § 1 Abs. 2 StVO";
+             const cat2 = "Übung zu Höchstgeschwindigkeiten";
+             
+             // Standardisierter Fragesatz und Hinweis für TEXT-Fragen
+             const prefix = "Bestimmen Sie die zulässige Höchstgeschwindigkeit für ";
+             const suffix = ". Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.";
+
+            return [
+                // === KATEGORIE 1: Übung zu § 1 Abs. 2 StVO (5 Fragen) ===
+                // 1. MC: Tatbestandsmerkmale § 1 Abs. 2 StVO
+                {
+                    category: cat1,
+                    type: 'MC',
+                    text: "Welche Tatbestandsmerkmale gehören zu § 1 Abs. 2 StVO?",
+                    options: [
+                        "Fahrzeugführer",
+                        "Verkehrsteilnehmer", 
+                        "Fahrbahn",
+                        "Fahrstreifen",
+                        "Gefährdung", 
+                        "Vermeidbarkeit", 
+                        "Rücksichtnahme"
+                    ],
+                    correctIndices: [1, 4, 5], 
+                    explanation: "Lies zum besseren Verständnis noch einmal § 1 Abs. 2 StVO."
+                },
+                // 2. MC: Voraussetzung der Vermeidbarkeit
+                {
+                    category: cat1, 
+                    type: 'MC', 
+                    text: "Auf welche der vier tatbestandlichen Varianten bezieht sich die Vermeidbarkeit?",
+                    options: [
+                        "Schädigung",
+                        "Gefährdung",
+                        "Behinderung", 
+                        "Belästigung" 
+                    ],
+                    correctIndices: [2, 3], 
+                    explanation: "Bei Schädigung und Gefährdung spielt die Vermeidbarkeit keine Rolle."
+                },
+                // 3. MC: "Anderer" im Sinne des § 1 Abs. 2 StVO
+                {
+                    category: cat1,
+                    type: 'MC',
+                    text: "Wer kann „Anderer“ im Sinne der Norm sein?",
+                    options: [
+                        "Verletzte Person", 
+                        "Eigentümer einer Sache", 
+                        "Tiere",
+                        "Pkw",
+                        "Schutzplanke"
+                    ],
+                    correctIndices: [0, 1], 
+                    explanation: "Der Begriff „Anderer“ bezieht sich auf Personen oder geschützte Rechtsgüter (Sachen/Eigentum) und umfasst daher nicht Tiere oder tote Objekte wie Schutzplanken." 
+                },
+                // 4. SC: Personenschaden
+                {
+                    category: cat1, 
+                    type: 'SC',
+                    text: "Wer kann einen Personenschaden im Sinne der Norm erleiden?",
+                    options: [
+                        "Natürliche Person", 
+                        "juristische Person",
+                        "beide"
+                    ],
+                    correctIndex: 0,
+                    explanation: "Juristische Personen sind „Rechtskonstrukte“ und können nicht unmittelbar verletzt werden"
+                },
+                // 5. SC: Sachschaden
+                {
+                    category: cat1, 
+                    type: 'SC',
+                    text: "Wer kann einen Sachschaden im Sinne der Norm erleiden",
+                    options: [
+                        "Natürliche Person",
+                        "juristische Person",
+                        "beide" 
+                    ],
+                    correctIndex: 2,
+                    explanation: "Auch juristische Personen, bspw. als Eigentümer einer Sache, können einen Sachschaden erleiden"
+                },
+
+                // === KATEGORIE 2: Übung zu Höchstgeschwindigkeiten (10 Fragen - Typ: TEXT, EXAKT NACH VORGABE) ===
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Pkw igO${suffix}`, 
+                    correctAnswer: "50", 
+                    explanation: "Innerhalb geschlossener Ortschaften gilt für alle Kraftfahrzeuge in der Regel 50 km/h (§ 3 Abs. 3 StVO)." 
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Lkw 12t agO${suffix}`, 
+                    correctAnswer: "60", 
+                    explanation: "Fahrzeuge über 7,5 t (hier 12 t) dürfen außerorts (auch auf der Autobahn) maximal 60 km/h fahren (§ 3 Abs. 3 StVO)."
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}KOM stehende Fahrgäste igO${suffix}`, // KORRIGIERT: ego -> igO
+                    correctAnswer: "60", 
+                    explanation: "" // KEIN HINWEIS WURDE VOM NUTZER FÜR DIESE FRAGE EXPLIZIT GEGEBEN.
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Pkw auf BAB${suffix}`, 
+                    correctAnswer: "0", 
+                    explanation: "Hinweis: Die Autobahnrichtgeschwindigkeitsverordnung (130 km/h) ist lediglich Empfehlung" // WORDWÖRTLICH ÜBERNOMMEN
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Motorrad agO${suffix}`, 
+                    correctAnswer: "100", 
+                    explanation: "Für Motorräder gilt außerorts die allgemeine Höchstgeschwindigkeit von 100 km/h (§ 3 Abs. 3 StVO)." 
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Lkw 36 t bei Z 274-70 agO${suffix}`, 
+                    correctAnswer: "60", 
+                    explanation: "Beachte Z. 274-70 Nr. 3 StVO, wonach die Geschwindigkeit aus § 3 Abs. 3 Nr. 2 lit. b sublit. aa StVO bestehen bleibt." // WORDWÖRTLICH ÜBERNOMMEN
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Wohnmobil 4,2 t igO Zweirichtungsverkehr mit jeweils zwei Fahrstreifen pro Richtung${suffix}`, 
+                    correctAnswer: "80", 
+                    explanation: "Beachte § 3 Abs. 3 Nr. 2 lit. c S. 2 StVO" // WORDWÖRTLICH ÜBERNOMMEN
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Lkw 7,5 t mit Anhänger agO${suffix}`, 
+                    correctAnswer: "80", 
+                    explanation: "Für LKW mit Anhänger gilt außerhalb geschlossener Ortschaften maximal 80 km/h."
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Motorrad mit Beiwagen igO${suffix}`, 
+                    correctAnswer: "50", 
+                    explanation: "Innerorts gilt für alle Kraftfahrzeuge (dazu zählt auch ein Motorrad mit Beiwagen) die allgemeine Höchstgeschwindigkeit von 50 km/h, sofern nicht anders beschildert."
+                },
+                { 
+                    category: cat2, 
+                    type: 'TEXT', 
+                    text: `${prefix}Pkw/Anhänger auf BAB${suffix}`, 
+                    correctAnswer: "100", 
+                    explanation: "Beachte 9. StVOAusnV 9" // WORDWÖRTLICH ÜBERNOMMEN
+                },
+            ];
+        };
+
+        // DOM-Elemente
+        const elements = {
+            categorySelection: document.getElementById('category-selection'),
+            categoryContainer: document.getElementById('category-container'),
+            quizArea: document.getElementById('quiz-area'),
+            questionText: document.getElementById('question-text'),
+            explanationText: document.getElementById('explanation-text'),
+            optionsContainer: document.getElementById('options-container'),
+            feedbackMessage: document.getElementById('feedback-message'),
+            nextButton: document.getElementById('next-button'),
+            currentScore: document.getElementById('current-score'),
+            resultArea: document.getElementById('result-area'),
+            finalScore: document.getElementById('final-score'),
+            totalQuestions: document.getElementById('total-questions'),
+            restartButton: document.getElementById('restart-button'),
+            appSubtitle: document.getElementById('app-subtitle'),
+            backToCategoriesQuiz: document.getElementById('back-to-categories-quiz'),
+            feedbackArea: document.getElementById('feedback-area') 
+        };
+        
+        // --- View Manager ---
+        const setView = (viewName) => {
+            // Standardmäßig alle Bereiche verstecken
+            elements.categorySelection.classList.add('hidden');
+            elements.quizArea.classList.add('hidden');
+            elements.resultArea.classList.add('hidden');
+            elements.appSubtitle.textContent = "Wähle eine Übungskategorie, um zu starten.";
+            
+            // Verstecke den MC/TEXT-Check-Button beim Ansichtenwechsel
+            document.getElementById('check-answer-button')?.classList.add('hidden');
+            elements.nextButton.classList.remove('hidden'); // Stelle sicher, dass "Nächste Frage" sichtbar ist
+
+            switch (viewName) {
+                case 'categories':
+                    elements.categorySelection.classList.remove('hidden');
+                    elements.appSubtitle.textContent = "Wähle eine Übungskategorie, um zu starten.";
+                    break;
+                case 'quiz':
+                    elements.quizArea.classList.remove('hidden');
+                    elements.appSubtitle.textContent = "Teste dein Wissen!";
+                    break;
+                case 'results':
+                    elements.resultArea.classList.remove('hidden');
+                    elements.appSubtitle.textContent = "Das Quiz ist beendet.";
+                    break;
+            }
+        };
+
+        // --- Fragen Laden (Vereinfacht) ---
+        const loadQuestions = () => {
+            allQuestions = getInitialQuestionsData();
+            showCategories();
+        };
+
+        // --- Quiz- und Kategorielogik (Funktionalität unverändert) ---
+
+        const showCategories = () => {
+            setView('categories');
+            elements.categoryContainer.innerHTML = '';
+            
+            // Gruppiere die Fragen nach Kategorie und zähle sie
+            const questionCounts = allQuestions.reduce((acc, q) => {
+                acc[q.category] = (acc[q.category] || 0) + 1;
+                return acc;
+            }, {});
+
+            // Iteriere über die gefundenen Kategorien, um Karten zu erstellen
+            Object.keys(questionCounts).forEach(category => {
+                const count = questionCounts[category];
+                
+                if (count > 0) { 
+                    const card = document.createElement('div');
+                    card.className = 'category-card cursor-pointer p-6 bg-white border-2 border-gray-200 rounded-lg shadow-md';
+                    card.innerHTML = `
+                        <h3 class="text-lg font-bold text-gray-800">${category}</h3>
+                        <p class="text-sm text-gray-500 mt-1">${count} Frage${count === 1 ? '' : 'n'} verfügbar</p>
+                        <button class="mt-4 w-full bg-cd-primary text-white py-2 rounded-lg text-sm font-semibold hover:bg-cd-hover transition-colors">
+                            Starten
+                        </button>
+                    `;
+                    card.onclick = () => startQuiz(category);
+                    elements.categoryContainer.appendChild(card);
+                }
+            });
+            
+            if (elements.categoryContainer.children.length === 0) {
+                 elements.categoryContainer.innerHTML = `<p class="text-gray-500">Es sind aktuell keine Fragen verfügbar.</p>`;
+            }
+        };
+
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[i], array[j]];
+            }
+            return array;
+        };
+
+        const startQuiz = (categoryName) => {
+            currentQuizQuestions = allQuestions.filter(q => q.category === categoryName);
+
+            if (currentQuizQuestions.length === 0) {
+                console.error(`Keine Fragen für die Kategorie "${categoryName}" gefunden.`);
+                return;
+            }
+
+            currentScore = 0;
+            currentQuestionIndex = 0;
+            elements.currentScore.textContent = 0;
+            
+            currentQuizQuestions = shuffleArray(currentQuizQuestions); 
+            
+            setView('quiz');
+            elements.nextButton.disabled = true;
+            elements.feedbackMessage.textContent = '';
+            
+            showQuestion();
+        };
+        
+        // --- TEXT Input Validierung (Nur erlaubte Zahlen) ---
+        const validateTextInput = (value) => {
+            // Die erlaubten Antworten im Quiz
+            const validValues = ["0", "50", "60", "80", "100", "120"];
+            const inputField = document.getElementById('text-answer-input');
+            const checkButton = document.getElementById('check-answer-button');
+            const feedbackDiv = document.getElementById('text-input-feedback');
+            const trimmedValue = String(value).trim();
+        
+            if (trimmedValue === "") {
+                if (checkButton) checkButton.disabled = true;
+                if (feedbackDiv) feedbackDiv.classList.add('hidden');
+                return false;
+            }
+            
+            if (!validValues.includes(trimmedValue)) {
+                if (checkButton) checkButton.disabled = true;
+                if (inputField) inputField.classList.add('border-red-500');
+                if (feedbackDiv) feedbackDiv.classList.remove('hidden');
+                return false;
+            }
+        
+            if (checkButton) checkButton.disabled = false;
+            if (inputField) inputField.classList.remove('border-red-500');
+            if (feedbackDiv) feedbackDiv.classList.add('hidden');
+            return true;
+        };
+
+
+        const showQuestion = () => {
+            if (currentQuestionIndex >= currentQuizQuestions.length) {
+                endQuiz();
+                return;
+            }
+
+            const question = currentQuizQuestions[currentQuestionIndex];
+            const isMC = question.type === 'MC'; 
+            const isTEXT = question.type === 'TEXT'; // Neuer Typ
+            
+            elements.questionText.textContent = `Frage ${currentQuestionIndex + 1}/${currentQuizQuestions.length}: ${question.text}`;
+            elements.optionsContainer.innerHTML = '';
+            elements.feedbackMessage.textContent = '';
+            elements.nextButton.disabled = true;
+            isQuestionActive = true;
+            selectedMCIndices = []; 
+            
+            elements.explanationText.classList.add('hidden');
+            elements.explanationText.innerHTML = '';
+
+            const checkButtonId = 'check-answer-button';
+            let checkButton = document.getElementById(checkButtonId);
+            
+            // Erzeuge den Check-Button, falls er noch nicht existiert
+            if (!checkButton) {
+                checkButton = document.createElement('button');
+                checkButton.id = checkButtonId;
+                checkButton.textContent = 'Antwort prüfen';
+                checkButton.className = 'bg-cd-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-cd-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+                elements.feedbackArea.appendChild(checkButton); 
+            }
+            
+            // Steuerung der Button-Sichtbarkeit
+            if (isMC || isTEXT) {
+                checkButton.classList.remove('hidden');
+                elements.nextButton.classList.add('hidden'); 
+                checkButton.disabled = true; 
+                checkButton.onclick = isMC ? checkMCAnswer : checkTextAnswer; // Dynamische Zuweisung des Handlers
+                elements.optionsContainer.className = isMC ? 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-8' : 'flex justify-center mb-8';
+
+            } else { // SC-Fragen
+                checkButton.classList.add('hidden');
+                elements.nextButton.classList.remove('hidden'); 
+                elements.optionsContainer.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 mb-8';
+            }
+
+
+            if (isTEXT) {
+                // Anzeigevorlage für Freitext-Eingabe (mit erlaubten Werten im Placeholder)
+                elements.optionsContainer.innerHTML = `
+                    <div class="w-full max-w-sm">
+                        <input type="number" id="text-answer-input" placeholder="Geschw. in km/h"
+                               class="w-full p-4 border-2 border-gray-300 rounded-lg text-lg text-center focus:border-cd-primary focus:ring-cd-primary"
+                               min="0" oninput="validateTextInput(this.value)">
+                        <div id="text-input-feedback" class="mt-2 text-sm text-red-500 hidden">Nur die Zahlen 0, 50, 60, 80, 100 oder 120 sind erlaubt.</div>
+                    </div>
+                `;
+            } else {
+                // Generierung der Buttons für MC/SC
+                question.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    
+                    let buttonClass = 'option-button w-full text-left p-4 rounded-lg font-medium transition-colors duration-200 border ';
+
+                    if (isMC) {
+                        buttonClass += 'bg-gray-50 border-gray-200 hover:bg-gray-100';
+                        button.onclick = () => toggleSelection(index, button); 
+                    } else { // SC
+                        buttonClass += 'bg-gray-50 border-gray-200 hover:bg-gray-100'; 
+                        button.onclick = () => handleSCAnswer(index, question.correctIndex, button); 
+                    }
+                    
+                    button.className = buttonClass;
+                    elements.optionsContainer.appendChild(button);
+                });
+            }
+        };
+        
+        const toggleSelection = (index, button) => {
+            if (!isQuestionActive) return;
+            
+            if (button.classList.contains('selected-mc')) {
+                button.classList.remove('selected-mc');
+                selectedMCIndices = selectedMCIndices.filter(i => i !== index);
+            } else {
+                button.classList.add('selected-mc');
+                selectedMCIndices.push(index);
+            }
+            
+            const checkButton = document.getElementById('check-answer-button');
+            if (checkButton) {
+                checkButton.disabled = selectedMCIndices.length === 0;
+            }
+        };
+
+        const handleSCAnswer = (selectedIndex, correctIndex, selectedButton) => {
+            if (!isQuestionActive) return;
+
+            isQuestionActive = false;
+
+            Array.from(elements.optionsContainer.children).forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('cursor-default');
+            });
+            
+            const isCorrect = selectedIndex === correctIndex;
+            provideFeedback(isCorrect);
+            
+            selectedButton.classList.add(isCorrect ? 'correct' : 'incorrect');
+            if (!isCorrect) {
+                const correctButton = elements.optionsContainer.children[correctIndex];
+                if (correctButton) {
+                    correctButton.classList.add('correct');
+                }
+            }
+            
+            elements.nextButton.disabled = false;
+        };
+        
+        const checkMCAnswer = () => {
+            if (!isQuestionActive) return;
+            
+            isQuestionActive = false;
+            
+            const question = currentQuizQuestions[currentQuestionIndex];
+            
+            const correctIndices = (question.correctIndices || []).slice().sort((a, b) => a - b);
+            const sortedSelectedIndices = selectedMCIndices.slice().sort((a, b) => a - b);
+            
+            const isCorrect = correctIndices.length === sortedSelectedIndices.length &&
+                              correctIndices.every((val, index) => val === sortedSelectedIndices[index]);
+
+            provideFeedback(isCorrect);
+            
+            Array.from(elements.optionsContainer.children).forEach((btn, index) => {
+                const isCorrectOption = correctIndices.includes(index);
+                const isSelected = sortedSelectedIndices.includes(index);
+                
+                btn.disabled = true;
+                btn.classList.add('cursor-default');
+                btn.classList.remove('selected-mc'); 
+
+                if (isCorrectOption) {
+                    btn.classList.add('correct');
+                } else if (!isCorrectOption && isSelected) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            document.getElementById('check-answer-button')?.classList.add('hidden');
+            elements.nextButton.classList.remove('hidden');
+            elements.nextButton.disabled = false;
+        };
+        
+        // --- Neue Funktion für Freitextantworten (TEXT) ---
+        const checkTextAnswer = () => {
+            if (!isQuestionActive) return;
+            
+            const inputField = document.getElementById('text-answer-input');
+            const checkButton = document.getElementById('check-answer-button');
+            const question = currentQuizQuestions[currentQuestionIndex];
+            
+            const inputValue = String(inputField.value).trim();
+
+            if (!validateTextInput(inputValue)) {
+                elements.feedbackMessage.textContent = 'Fehler: Ungültige Eingabe.';
+                elements.feedbackMessage.className = 'text-lg font-semibold text-red-600';
+                return;
+            }
+            
+            isQuestionActive = false;
+            inputField.disabled = true;
+
+            const isCorrect = inputValue === question.correctAnswer;
+            
+            // Visuelles Feedback auf dem Input-Feld
+            inputField.classList.add(isCorrect ? 'correct' : 'incorrect');
+            inputField.classList.remove('border-gray-300', 'border-red-500', 'focus:border-cd-primary', 'focus:ring-cd-primary');
+            
+            // Allgemeines Feedback
+            provideFeedback(isCorrect, isCorrect ? '' : `Korrekte Antwort: ${question.correctAnswer} km/h`);
+
+            checkButton.classList.add('hidden');
+            elements.nextButton.classList.remove('hidden');
+            elements.nextButton.disabled = false;
+        };
+
+
+        const provideFeedback = (isCorrect, correctText = '') => {
+            const currentQuestion = currentQuizQuestions[currentQuestionIndex];
+            
+            if (isCorrect) {
+                currentScore++;
+                elements.currentScore.textContent = currentScore;
+                elements.feedbackMessage.textContent = 'Richtig! Gut gemacht.';
+                elements.feedbackMessage.className = 'text-lg font-semibold text-green-600';
+            } else {
+                elements.feedbackMessage.textContent = 'Falsch. Die korrekte(n) Antwort(en) ist/sind markiert.';
+                elements.feedbackMessage.className = 'text-lg font-semibold text-red-600';
+                
+                // Erklärung für Falsche Antworten
+                if (currentQuestion.type === 'TEXT') {
+                     let explanationHtml = `**Falsch.** Die zulässige Höchstgeschwindigkeit beträgt: ${currentQuestion.correctAnswer} km/h.`;
+                     if (currentQuestion.explanation) {
+                         // Fügt den wortwörtlichen Hinweis des Nutzers hinzu
+                         explanationHtml += `<br>**Hinweis:** ${currentQuestion.explanation}`;
+                     }
+                     elements.explanationText.innerHTML = explanationHtml;
+                     elements.explanationText.classList.remove('hidden');
+                } else if (currentQuestion.explanation) {
+                    elements.explanationText.innerHTML = `**Erklärung:** ${currentQuestion.explanation}`;
+                    elements.explanationText.classList.remove('hidden');
+                }
+            }
+        };
+
+        const nextQuestion = () => {
+            currentQuestionIndex++;
+            showQuestion();
+        };
+
+        const endQuiz = () => {
+            setView('results');
+            
+            elements.finalScore.textContent = currentScore;
+            elements.totalQuestions.textContent = currentQuizQuestions.length;
+            
+            // Highscore-Speicherlogik entfernt
+        };
+        
+        // --- Event Listener ---
+        elements.nextButton.addEventListener('click', nextQuestion);
+        
+        elements.restartButton.addEventListener('click', showCategories); 
+        
+        elements.backToCategoriesQuiz.addEventListener('click', showCategories);
+
+
+        // --- Start der App ---
+        // Die App startet direkt mit dem Laden der lokalen Fragen
+        loadQuestions();
+
+    </script>
 </body>
 </html>
