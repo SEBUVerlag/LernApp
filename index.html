@@ -301,7 +301,7 @@
                     explanation: "Beachte 9. StVOAusnV 9" 
                 },
 
-                // === KATEGORIE 3: Übungen zu TBNR Abstand (1 Frage) ===
+                // === KATEGORIE 3: Übungen zu TBNR Abstand (2 Fragen) ===
                 {
                     category: cat3, 
                     type: 'TEXT',
@@ -309,8 +309,16 @@
                     correctAnswer: "104100", 
                     explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
                 },
+                // NEUE FRAGE HINZUGEFÜGT
+                {
+                    category: cat3, 
+                    type: 'TEXT',
+                    text: `${tbnrPrefix}Lkw, 12 t, agO, Zweirichtungsverkehr, ein Fahrstreifen/Richtung, V=80 km/h, s=45 m`, 
+                    correctAnswer: "104124", 
+                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
+                },
 
-                // === KATEGORIE 4: NEU: TBNR/BKatV (3 Fragen) ===
+                // === KATEGORIE 4: NEU: TBNR/BKatV (7 Fragen) ===
                 // 1. Frage: Bedeutung 1. Ziffer
                  {
                     category: cat4,
@@ -352,6 +360,68 @@
                     ],
                     correctIndex: 3, 
                     explanation: "" 
+                },
+                // 4. FRAGE: Rechtsgrundlage
+                {
+                    category: cat4,
+                    type: 'SC',
+                    text: "Aus welcher Rechtsgrundlage ergibt sich die Unterscheidung zwischen Verwarnungsgeld und Bußgeld?",
+                    options: [
+                        "§ 49 StVO",
+                        "§ 1 Abs. 1 BKatV", // Korrekt
+                        "§ 24 Abs. 1 StVG",
+                        "§ 19 OWiG"
+                    ],
+                    correctIndex: 1, 
+                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
+                },
+                // 5. FRAGE: Aussagen
+                {
+                    category: cat4,
+                    type: 'MC',
+                    text: "Welche Aussagen sind richtig?",
+                    options: [
+                        "Verwarnungsgelder müssen in 5-Euro-Schritten erhoben werden.", // 0 (richtig)
+                        "Bußgelder dürfen vor Ort erhoben werden.", // 1 (falsch)
+                        "Bei Verwarnungsgeldern und Bußgeldern fallen Verwaltungsgebühren an.", // 2 (falsch)
+                        "Verwarnungsgelder dürfen nach eigenem Ermessen erhöht werden", // 3 (richtig)
+                        "Bußgelder dürfen bei Radfahrern auf 15 Euro reduziert werden.", // 4 (falsch)
+                        "Bußgelder müssen bei Vorsatz verdoppelt werden", // 5 (richtig)
+                        "Bei Einsicht des Betroffenen darf grundsätzlich mündlich verwarnt werden", // 6 (falsch)
+                        "Fußgänger bezahlten grundsätzlich nur 5 Euro" // 7 (falsch)
+                    ],
+                    correctIndices: [0, 3, 5], 
+                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
+                },
+                // 6. FRAGE: Tateinheit
+                {
+                    category: cat4,
+                    type: 'MC',
+                    text: "Welche Rechtsnormen sind bei vorliegender Tateinheit einschlägig?",
+                    options: [
+                        "§ 19 OWiG", // 0 (richtig)
+                        "§ 20 OWiG", // 1 (falsch)
+                        "§ 2 Abs. 6 BKatV", // 2 (richtig)
+                        "§ 2 Abs. 7 BKatV", // 3 (falsch)
+                        "§ 3 Abs. 5 BKatV" // 4 (richtig)
+                    ],
+                    correctIndices: [0, 2, 4], 
+                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
+                },
+                // 7. FRAGE: NEU HINZUGEFÜGT (MC) - Tatmehrheit
+                {
+                    category: cat4,
+                    type: 'MC',
+                    text: "Welche Rechtsnormen sind bei vorliegender Tatmehrheit einschlägig?",
+                    options: [
+                        "§ 19 OWiG", // 0 (falsch)
+                        "§ 20 OWiG", // 1 (richtig)
+                        "§ 2 Abs. 6 BKatV", // 2 (falsch)
+                        "§ 2 Abs. 7 BKatV", // 3 (richtig)
+                        "§ 3 Abs. 5 BKatV" // 4 (falsch)
+                    ],
+                    correctIndices: [1, 3], 
+                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
                 },
             ];
         };
