@@ -74,7 +74,7 @@
 
     <!-- Hauptcontainer für die App -->
     <div id="app-container" class="container-card w-full bg-white rounded-xl p-6 md:p-10 transition-all duration-300">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">SEBU Lern-App Verkehrsrecht/Verkehrslehre</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">SEBU Lern-App Verkehrsrecht<br>Verkehrslehre</h1>
         <p class="text-gray-500 mb-6" id="app-subtitle">Wähle eine Übungskategorie, um zu starten.</p>
 
         <!-- Status-Anzeige (Nur aktuelle Punktzahl) -->
@@ -129,303 +129,16 @@
         </div>
     </div>
 
-    <!-- Entferne Firebase SDKs importieren Block, da die App jetzt rein lokal ist. -->
+    <!-- Script für die Quiz-Logik -->
     <script>
         // --- Globale Variablen ---
-        let allQuestions = []; // Alle Fragen aus der lokalen Quelle
+        let allQuestions = []; // Alle Fragen aus der internen Quelle
         let currentQuizQuestions = []; // Fragen für das aktuelle Quiz
         let currentQuestionIndex = 0;
         let currentScore = 0;
         let isQuestionActive = true;
         let selectedMCIndices = []; // Speichert die ausgewählten Indizes für MC-Fragen
         
-        // --- Initiale Quizfragen (Lokale Quelle) ---
-        const getInitialQuestionsData = () => {
-             // FRAGEN BASIEREND AUF DER VORLAGE DES NUTZERS 
-             const cat1 = "§ 1 Abs. 2 StVO"; 
-             const cat2 = "Höchstgeschwindigkeit"; 
-             const cat3 = "TBNR Abstand"; 
-             const cat4 = "TBNR/BKatV"; 
-             
-             // Standardisierter Fragesatz und Hinweis für TEXT-Fragen
-             const prefix = "Bestimmen Sie die zulässige Höchstgeschwindigkeit für ";
-             const suffix = ". Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.";
-
-             // *** NEU: TBNR Präfix ***
-             const tbnrPrefix = "Bestimme die TBNR für ";
-
-            return [
-                // === KATEGORIE 1: Übung zu § 1 Abs. 2 StVO (5 Fragen) ===
-                // 1. MC: Tatbestandsmerkmale § 1 Abs. 2 StVO
-                {
-                    category: cat1,
-                    type: 'MC',
-                    text: "Welche Tatbestandsmerkmale gehören zu § 1 Abs. 2 StVO?",
-                    options: [
-                        "Fahrzeugführer",
-                        "Verkehrsteilnehmer", 
-                        "Fahrbahn",
-                        "Fahrstreifen",
-                        "Gefährdung", 
-                        "Vermeidbarkeit", 
-                        "Rücksichtnahme"
-                    ],
-                    correctIndices: [1, 4, 5], 
-                    explanation: "Lies zum besseren Verständnis noch einmal § 1 Abs. 2 StVO."
-                },
-                // 2. MC: Voraussetzung der Vermeidbarkeit
-                {
-                    category: cat1, 
-                    type: 'MC', 
-                    text: "Auf welche der vier tatbestandlichen Varianten bezieht sich die Vermeidbarkeit?",
-                    options: [
-                        "Schädigung",
-                        "Gefährdung",
-                        "Behinderung", 
-                        "Belästigung" 
-                    ],
-                    correctIndices: [2, 3], 
-                    explanation: "Bei Schädigung und Gefährdung spielt die Vermeidbarkeit keine Rolle."
-                },
-                // 3. MC: "Anderer" im Sinne des § 1 Abs. 2 StVO
-                {
-                    category: cat1,
-                    type: 'MC',
-                    text: "Wer kann „Anderer“ im Sinne der Norm sein?",
-                    options: [
-                        "Verletzte Person", 
-                        "Eigentümer einer Sache", 
-                        "Tiere",
-                        "Pkw",
-                        "Schutzplanke"
-                    ],
-                    correctIndices: [0, 1], 
-                    explanation: "Der Begriff „Anderer“ bezieht sich auf Personen oder geschützte Rechtsgüter (Sachen/Eigentum) und umfasst daher nicht Tiere oder tote Objekte wie Schutzplanken." 
-                },
-                // 4. SC: Personenschaden
-                {
-                    category: cat1, 
-                    type: 'SC',
-                    text: "Wer kann einen Personenschaden im Sinne der Norm erleiden?",
-                    options: [
-                        "Natürliche Person", 
-                        "juristische Person",
-                        "beide"
-                    ],
-                    correctIndex: 0,
-                    explanation: "Juristische Personen sind „Rechtskonstrukte“ und können nicht unmittelbar verletzt werden"
-                },
-                // 5. SC: Sachschaden
-                {
-                    category: cat1, 
-                    type: 'SC',
-                    text: "Wer kann einen Sachschaden im Sinne der Norm erleiden",
-                    options: [
-                        "Natürliche Person",
-                        "juristische Person",
-                        "beide" 
-                    ],
-                    correctIndex: 2,
-                    explanation: "Auch juristische Personen, bspw. als Eigentümer einer Sache, können einen Sachschaden erleiden"
-                },
-
-                // === KATEGORIE 2: Übung zu Höchstgeschwindigkeiten (10 Fragen - Typ: TEXT, EXAKT NACH VORGABE) ===
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Pkw igO${suffix}`, 
-                    correctAnswer: "50", 
-                    explanation: "Innerhalb geschlossener Ortschaften gilt für alle Kraftfahrzeuge in der Regel 50 km/h (§ 3 Abs. 3 StVO)." 
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Lkw 12t agO${suffix}`, 
-                    correctAnswer: "60", 
-                    explanation: "Fahrzeuge über 7,5 t (hier 12 t) dürfen außerorts (auch auf der Autobahn) maximal 60 km/h fahren (§ 3 Abs. 3 StVO)."
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}KOM stehende Fahrgäste igO${suffix}`, 
-                    correctAnswer: "60", 
-                    explanation: "" 
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Pkw auf BAB${suffix}`, 
-                    correctAnswer: "0", 
-                    explanation: "Hinweis: Die Autobahnrichtgeschwindigkeitsverordnung (130 km/h) ist lediglich Empfehlung" 
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Motorrad agO${suffix}`, 
-                    correctAnswer: "100", 
-                    explanation: "Für Motorräder gilt außerorts die allgemeine Höchstgeschwindigkeit von 100 km/h (§ 3 Abs. 3 StVO)." 
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Lkw 36 t bei Z 274-70 agO${suffix}`, 
-                    correctAnswer: "60", 
-                    explanation: "Beachte Z. 274-70 Nr. 3 StVO, wonach die Geschwindigkeit aus § 3 Abs. 3 Nr. 2 lit. b sublit. aa StVO bestehen bleibt." 
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Wohnmobil 4,2 t igO Zweirichtungsverkehr mit jeweils zwei Fahrstreifen pro Richtung${suffix}`, 
-                    correctAnswer: "80", 
-                    explanation: "Beachte § 3 Abs. 3 Nr. 2 lit. c S. 2 StVO" 
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Lkw 7,5 t mit Anhänger agO${suffix}`, 
-                    correctAnswer: "80", 
-                    explanation: "Für LKW mit Anhänger gilt außerhalb geschlossener Ortschaften maximal 80 km/h."
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Motorrad mit Beiwagen igO${suffix}`, 
-                    correctAnswer: "50", 
-                    explanation: "Innerorts gilt für alle Kraftfahrzeuge (dazu zählt auch ein Motorrad mit Beiwagen) die allgemeine Höchstgeschwindigkeit von 50 km/h, sofern nicht anders beschildert."
-                },
-                { 
-                    category: cat2, 
-                    type: 'TEXT', 
-                    text: `${prefix}Pkw/Anhänger auf BAB${suffix}`, 
-                    correctAnswer: "100", 
-                    explanation: "Beachte 9. StVOAusnV 9" 
-                },
-
-                // === KATEGORIE 3: Übungen zu TBNR Abstand (2 Fragen) ===
-                {
-                    category: cat3, 
-                    type: 'TEXT',
-                    text: `${tbnrPrefix}Pkw, agO, Zweirichtungsverkehr, jeweils zwei Fahrstreifen, V=100 km/h, s=40 m`, 
-                    correctAnswer: "104100", 
-                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
-                },
-                // NEUE FRAGE HINZUGEFÜGT
-                {
-                    category: cat3, 
-                    type: 'TEXT',
-                    text: `${tbnrPrefix}Lkw, 12 t, agO, Zweirichtungsverkehr, ein Fahrstreifen/Richtung, V=80 km/h, s=45 m`, 
-                    correctAnswer: "104124", 
-                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
-                },
-
-                // === KATEGORIE 4: NEU: TBNR/BKatV (7 Fragen) ===
-                // 1. Frage: Bedeutung 1. Ziffer
-                 {
-                    category: cat4,
-                    type: 'SC',
-                    text: "Wofür steht die 1. Ziffer der TBNR?",
-                    options: [
-                        "Paragraf aus der jeweiligen Verordnung", 
-                        "Verordnung", // Korrekt: Verordnung
-                        "Geldbetrag",
-                        "Schlüsselnummer des Verstoßes"
-                    ],
-                    correctIndex: 1, 
-                    explanation: "" 
-                },
-                // 2. Frage: Bedeutung 2. und 3. Ziffer
-                {
-                    category: cat4,
-                    type: 'SC',
-                    text: "Wofür stehen die 2. und 3. Ziffer der TBNR?",
-                    options: [
-                        "Paragraf aus der jeweiligen Verordnung", // Korrekt: Paragraf
-                        "Verordnung",
-                        "Geldbetrag",
-                        "Schlüsselnummer des Verstoßes"
-                    ],
-                    correctIndex: 0, 
-                    explanation: "" 
-                },
-                // 3. Frage: Bedeutung 4.-6. Ziffer
-                {
-                    category: cat4,
-                    type: 'SC',
-                    text: "Wofür stehen die 4. bis 6. Ziffer der TBNR?",
-                    options: [
-                        "Paragraf aus der jeweiligen Verordnung", 
-                        "Verordnung",
-                        "Geldbetrag",
-                        "Schlüsselnummer des Verstoßes" // Korrekt: Schlüsselnummer
-                    ],
-                    correctIndex: 3, 
-                    explanation: "" 
-                },
-                // 4. FRAGE: Rechtsgrundlage
-                {
-                    category: cat4,
-                    type: 'SC',
-                    text: "Aus welcher Rechtsgrundlage ergibt sich die Unterscheidung zwischen Verwarnungsgeld und Bußgeld?",
-                    options: [
-                        "§ 49 StVO",
-                        "§ 1 Abs. 1 BKatV", // Korrekt
-                        "§ 24 Abs. 1 StVG",
-                        "§ 19 OWiG"
-                    ],
-                    correctIndex: 1, 
-                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
-                },
-                // 5. FRAGE: Aussagen
-                {
-                    category: cat4,
-                    type: 'MC',
-                    text: "Welche Aussagen sind richtig?",
-                    options: [
-                        "Verwarnungsgelder müssen in 5-Euro-Schritten erhoben werden.", // 0 (richtig)
-                        "Bußgelder dürfen vor Ort erhoben werden.", // 1 (falsch)
-                        "Bei Verwarnungsgeldern und Bußgeldern fallen Verwaltungsgebühren an.", // 2 (falsch)
-                        "Verwarnungsgelder dürfen nach eigenem Ermessen erhöht werden", // 3 (richtig)
-                        "Bußgelder dürfen bei Radfahrern auf 15 Euro reduziert werden.", // 4 (falsch)
-                        "Bußgelder müssen bei Vorsatz verdoppelt werden", // 5 (richtig)
-                        "Bei Einsicht des Betroffenen darf grundsätzlich mündlich verwarnt werden", // 6 (falsch)
-                        "Fußgänger bezahlten grundsätzlich nur 5 Euro" // 7 (falsch)
-                    ],
-                    correctIndices: [0, 3, 5], 
-                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
-                },
-                // 6. FRAGE: Tateinheit
-                {
-                    category: cat4,
-                    type: 'MC',
-                    text: "Welche Rechtsnormen sind bei vorliegender Tateinheit einschlägig?",
-                    options: [
-                        "§ 19 OWiG", // 0 (richtig)
-                        "§ 20 OWiG", // 1 (falsch)
-                        "§ 2 Abs. 6 BKatV", // 2 (richtig)
-                        "§ 2 Abs. 7 BKatV", // 3 (falsch)
-                        "§ 3 Abs. 5 BKatV" // 4 (richtig)
-                    ],
-                    correctIndices: [0, 2, 4], 
-                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
-                },
-                // 7. FRAGE: NEU HINZUGEFÜGT (MC) - Tatmehrheit
-                {
-                    category: cat4,
-                    type: 'MC',
-                    text: "Welche Rechtsnormen sind bei vorliegender Tatmehrheit einschlägig?",
-                    options: [
-                        "§ 19 OWiG", // 0 (falsch)
-                        "§ 20 OWiG", // 1 (richtig)
-                        "§ 2 Abs. 6 BKatV", // 2 (falsch)
-                        "§ 2 Abs. 7 BKatV", // 3 (richtig)
-                        "§ 3 Abs. 5 BKatV" // 4 (falsch)
-                    ],
-                    correctIndices: [1, 3], 
-                    explanation: "" // Keine Erklärung vom Nutzer bereitgestellt
-                },
-            ];
-        };
-
         // DOM-Elemente
         const elements = {
             categorySelection: document.getElementById('category-selection'),
@@ -474,9 +187,261 @@
             }
         };
 
-        // --- Fragen Laden (Vereinfacht) ---
+        // --- Fragen Laden (INTERNE Daten) ---
         const loadQuestions = () => {
-            allQuestions = getInitialQuestionsData();
+            // Die Fragen sind nun direkt hier im JavaScript-Code enthalten (Single-File-Version)
+            allQuestions = [
+                {
+                    "category": "§ 1 Abs. 2 StVO",
+                    "type": "MC",
+                    "text": "Welche Tatbestandsmerkmale gehören zu § 1 Abs. 2 StVO?",
+                    "options": [
+                        "Fahrzeugführer",
+                        "Verkehrsteilnehmer",
+                        "Fahrbahn",
+                        "Fahrstreifen",
+                        "Gefährdung",
+                        "Vermeidbarkeit",
+                        "Rücksichtnahme"
+                    ],
+                    "correctIndices": [1, 4, 5],
+                    "explanation": "Lies zum besseren Verständnis noch einmal § 1 Abs. 2 StVO."
+                },
+                {
+                    "category": "§ 1 Abs. 2 StVO",
+                    "type": "MC",
+                    "text": "Auf welche der vier tatbestandlichen Varianten bezieht sich die Vermeidbarkeit?",
+                    "options": [
+                        "Schädigung",
+                        "Gefährdung",
+                        "Behinderung",
+                        "Belästigung"
+                    ],
+                    "correctIndices": [2, 3],
+                    "explanation": "Bei Schädigung und Gefährdung spielt die Vermeidbarkeit keine Rolle."
+                },
+                {
+                    "category": "§ 1 Abs. 2 StVO",
+                    "type": "MC",
+                    "text": "Wer kann „Anderer“ im Sinne der Norm sein?",
+                    "options": [
+                        "Verletzte Person",
+                        "Eigentümer einer Sache",
+                        "Tiere",
+                        "Pkw",
+                        "Schutzplanke"
+                    ],
+                    "correctIndices": [0, 1],
+                    "explanation": "Der Begriff „Anderer“ bezieht sich auf Personen oder geschützte Rechtsgüter (Sachen/Eigentum) und umfasst daher nicht Tiere oder tote Objekte wie Schutzplanken."
+                },
+                {
+                    "category": "§ 1 Abs. 2 StVO",
+                    "type": "SC",
+                    "text": "Wer kann einen Personenschaden im Sinne der Norm erleiden?",
+                    "options": [
+                        "Natürliche Person",
+                        "juristische Person",
+                        "beide"
+                    ],
+                    "correctIndex": 0,
+                    "explanation": "Juristische Personen sind „Rechtskonstrukte“ und können nicht unmittelbar verletzt werden"
+                },
+                {
+                    "category": "§ 1 Abs. 2 StVO",
+                    "type": "SC",
+                    "text": "Wer kann einen Sachschaden im Sinne der Norm erleiden",
+                    "options": [
+                        "Natürliche Person",
+                        "juristische Person",
+                        "beide"
+                    ],
+                    "correctIndex": 2,
+                    "explanation": "Auch juristische Personen, bspw. als Eigentümer einer Sache, können einen Sachschaden erleiden"
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Pkw igO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "50",
+                    "explanation": "Innerhalb geschlossener Ortschaften gilt für alle Kraftfahrzeuge in der Regel 50 km/h (§ 3 Abs. 3 StVO)."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Lkw 12t agO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "60",
+                    "explanation": "Fahrzeuge über 7,5 t (hier 12 t) dürfen außerorts (auch auf der Autobahn) maximal 60 km/h fahren (§ 3 Abs. 3 StVO)."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für KOM stehende Fahrgäste igO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "60",
+                    "explanation": "Busse mit stehenden Fahrgästen dürfen innerorts maximal 60 km/h fahren, sofern die baulichen Verhältnisse dies zulassen."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Pkw auf BAB. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "0",
+                    "explanation": "Hinweis: Die Autobahnrichtgeschwindigkeitsverordnung (130 km/h) ist lediglich Empfehlung. Es gibt keine verbindliche Höchstgeschwindigkeit ohne Beschilderung."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Motorrad agO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "100",
+                    "explanation": "Für Motorräder gilt außerorts die allgemeine Höchstgeschwindigkeit von 100 km/h (§ 3 Abs. 3 StVO)."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Lkw 36 t bei Z 274-70 agO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "60",
+                    "explanation": "Beachte Z. 274-70 Nr. 3 StVO, wonach die Geschwindigkeit aus § 3 Abs. 3 Nr. 2 lit. b sublit. aa StVO (60 km/h für Fahrzeuge über 7,5 t) bestehen bleibt."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Wohnmobil 4,2 t igO Zweirichtungsverkehr mit jeweils zwei Fahrstreifen pro Richtung. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "80",
+                    "explanation": "Beachte § 3 Abs. 3 Nr. 2 lit. c S. 2 StVO: Auf Fahrbahnen mit zwei Fahrstreifen für eine Richtung (innerhalb geschlossener Ortschaften) gilt für Kfz über 3,5 t, dass die allgemeine Geschw. 50 km/h auf 80 km/h angehoben ist. (Hier 4,2 t)."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Lkw 7,5 t mit Anhänger agO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "80",
+                    "explanation": "Für LKW mit Anhänger gilt außerhalb geschlossener Ortschaften maximal 80 km/h."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Motorrad mit Beiwagen igO. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "50",
+                    "explanation": "Innerorts gilt für alle Kraftfahrzeuge (dazu zählt auch ein Motorrad mit Beiwagen) die allgemeine Höchstgeschwindigkeit von 50 km/h, sofern nicht anders beschildert."
+                },
+                {
+                    "category": "Höchstgeschwindigkeit",
+                    "type": "TEXT",
+                    "text": "Bestimmen Sie die zulässige Höchstgeschwindigkeit für Pkw/Anhänger auf BAB. Hinweis: Sofern keine zulässige Höchstgeschwindigkeit existiert, geben Sie bitte \"0\" ein.",
+                    "correctAnswer": "100",
+                    "explanation": "Beachte 9. StVOAusnV (9. Ausnahmeverordnung zur StVO)."
+                },
+                {
+                    "category": "TBNR Abstand",
+                    "type": "TEXT",
+                    "text": "Bestimme die TBNR für Pkw, agO, Zweirichtungsverkehr, jeweils zwei Fahrstreifen, V=100 km/h, s=40 m",
+                    "correctAnswer": "104100",
+                    "explanation": "Zur Ermittlung der TBNR beachte die BKatV und die zugehörigen Tabellen. Hier liegt der Abstand unter 4/10 des halben Tachowertes (50 m)."
+                },
+                {
+                    "category": "TBNR Abstand",
+                    "type": "TEXT",
+                    "text": "Bestimme die TBNR für Lkw, 12 t, agO, Zweirichtungsverkehr, ein Fahrstreifen/Richtung, V=80 km/h, s=45 m",
+                    "correctAnswer": "104124",
+                    "explanation": "Hier gilt für den Lkw ein geringerer Mindestabstand. 45m Abstand bei 80 km/h entspricht einem Unterschreiten unter 5/10 des halben Tachowertes (40 m)."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "SC",
+                    "text": "Wofür steht die 1. Ziffer der TBNR?",
+                    "options": [
+                        "Paragraf aus der jeweiligen Verordnung",
+                        "Verordnung",
+                        "Geldbetrag",
+                        "Schlüsselnummer des Verstoßes"
+                    ],
+                    "correctIndex": 1,
+                    "explanation": "Die erste Ziffer steht für die Rechtsverordnung (z.B. 1=StVO, 2=StVZO)."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "SC",
+                    "text": "Wofür stehen die 2. und 3. Ziffer der TBNR?",
+                    "options": [
+                        "Paragraf aus der jeweiligen Verordnung",
+                        "Verordnung",
+                        "Geldbetrag",
+                        "Schlüsselnummer des Verstoßes"
+                    ],
+                    "correctIndex": 0,
+                    "explanation": "Die zweite und dritte Ziffer stehen für den Paragrafen innerhalb der Verordnung (z.B. § 03 StVO)."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "SC",
+                    "text": "Wofür stehen die 4. bis 6. Ziffer der TBNR?",
+                    "options": [
+                        "Paragraf aus der jeweiligen Verordnung",
+                        "Verordnung",
+                        "Geldbetrag",
+                        "Schlüsselnummer des Verstoßes"
+                    ],
+                    "correctIndex": 3,
+                    "explanation": "Die vierte bis sechste Ziffer sind die individuelle Schlüsselnummer des Verstoßes."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "SC",
+                    "text": "Aus welcher Rechtsgrundlage ergibt sich die Unterscheidung zwischen Verwarnungsgeld und Bußgeld?",
+                    "options": [
+                        "§ 49 StVO",
+                        "§ 1 Abs. 1 BKatV",
+                        "§ 24 Abs. 1 StVG",
+                        "§ 19 OWiG"
+                    ],
+                    "correctIndex": 1,
+                    "explanation": "§ 1 Abs. 1 BKatV regelt, wann ein Regelsatz ein Verwarnungs- oder ein Bußgeld ist."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "MC",
+                    "text": "Welche Aussagen sind richtig?",
+                    "options": [
+                        "Verwarnungsgelder müssen in 5-Euro-Schritten erhoben werden.",
+                        "Bußgelder dürfen vor Ort erhoben werden.",
+                        "Bei Verwarnungsgeldern und Bußgeldern fallen Verwaltungsgebühren an.",
+                        "Verwarnungsgelder dürfen nach eigenem Ermessen erhöht werden",
+                        "Bußgelder dürfen bei Radfahrern auf 15 Euro reduziert werden.",
+                        "Bußgelder müssen bei Vorsatz verdoppelt werden",
+                        "Bei Einsicht des Betroffenen darf grundsätzlich mündlich verwarnt werden",
+                        "Fußgänger bezahlten grundsätzlich nur 5 Euro"
+                    ],
+                    "correctIndices": [0, 3, 5],
+                    "explanation": "Falsch: Bußgelder sind nicht vor Ort zu erheben. Falsch: Verwaltungsgebühren fallen nur bei Bußgeldern an. Falsch: Es gibt keine spezielle Regelung zur Reduzierung auf 15 Euro für Radfahrer. Falsch: Mündliche Verwarnungen sind nur bei geringfügigen OWiG-Verstößen vorgesehen. Falsch: Der Regelsatz für Fußgänger ist nicht pauschal 5 Euro."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "MC",
+                    "text": "Welche Rechtsnormen sind bei vorliegender Tateinheit einschlägig?",
+                    "options": [
+                        "§ 19 OWiG",
+                        "§ 20 OWiG",
+                        "§ 2 Abs. 6 BKatV",
+                        "§ 2 Abs. 7 BKatV",
+                        "§ 3 Abs. 5 BKatV"
+                    ],
+                    "correctIndices": [0, 2, 4],
+                    "explanation": "Tateinheit (mehrere TBNR durch eine Handlung) regeln § 19 OWiG, § 2 Abs. 6 BKatV und § 3 Abs. 5 BKatV."
+                },
+                {
+                    "category": "TBNR/BKatV",
+                    "type": "MC",
+                    "text": "Welche Rechtsnormen sind bei vorliegender Tatmehrheit einschlägig?",
+                    "options": [
+                        "§ 19 OWiG",
+                        "§ 20 OWiG",
+                        "§ 2 Abs. 6 BKatV",
+                        "§ 2 Abs. 7 BKatV",
+                        "§ 3 Abs. 5 BKatV"
+                    ],
+                    "correctIndices": [1, 3],
+                    "explanation": "Tatmehrheit (mehrere TBNR durch mehrere Handlungen) regeln § 20 OWiG und § 2 Abs. 7 BKatV."
+                }
+            ];
+            
+            console.log(`Erfolgreich ${allQuestions.length} Fragen intern geladen.`);
             showCategories();
         };
 
@@ -546,7 +511,8 @@
         };
         
         // --- TEXT Input Validierung (Nur erlaubte Zahlen) ---
-        const validateTextInput = (value) => {
+        // Muss hier außerhalb der Funktion definiert sein, damit oninput es findet
+        window.validateTextInput = (value) => {
             // Die erlaubten Antworten im Quiz
             const inputField = document.getElementById('text-answer-input');
             const checkButton = document.getElementById('check-answer-button');
@@ -569,9 +535,10 @@
                 isValid = /^\d{6}$/.test(trimmedValue); // Muss 6 Ziffern sein
                 feedbackText = "TBNR muss eine 6-stellige Zahl sein.";
             } else if (question.category === "Höchstgeschwindigkeit") { // Geschwindigkeit
-                const validValues = ["0", "50", "60", "80", "100", "120"];
+                // Erweitert auf mögliche Höchstgeschwindigkeiten
+                const validValues = ["0", "50", "60", "80", "100", "120", "130"]; // 130 hinzugefügt, falls doch mal beschildert.
                 isValid = validValues.includes(trimmedValue);
-                feedbackText = "Nur die Zahlen 0, 50, 60, 80, 100 oder 120 sind erlaubt.";
+                feedbackText = "Nur die Zahlen 0, 50, 60, 80, 100, 120 oder 130 sind erlaubt.";
             } else {
                 // Fallback, falls andere TEXT-Fragen existieren
                 isValid = true; 
@@ -653,7 +620,7 @@
                     inputType = "text"; 
                 } else if (question.category === "Höchstgeschwindigkeit") { // Geschwindigkeit
                     placeholder = "Geschw. in km/h";
-                    feedbackText = "Nur die Zahlen 0, 50, 60, 80, 100 oder 120 sind erlaubt.";
+                    feedbackText = "Nur die Zahlen 0, 50, 60, 80, 100, 120 oder 130 sind erlaubt.";
                     inputType = "number";
                 }
 
@@ -666,6 +633,8 @@
                         <div id="text-input-feedback" class="mt-2 text-sm text-red-500 hidden">${feedbackText}</div>
                     </div>
                 `;
+                // Manuelles Auslösen der Validierung, um den Check-Button zu setzen, falls das Feld leer ist
+                validateTextInput(''); 
             } else {
                 // Generierung der Buttons für MC/SC
                 question.options.forEach((option, index) => {
@@ -764,7 +733,7 @@
             elements.nextButton.disabled = false;
         };
         
-        // --- Neue Funktion für Freitextantworten (TEXT) ---
+        // --- Funktion für Freitextantworten (TEXT) ---
         const checkTextAnswer = () => {
             if (!isQuestionActive) return;
             
@@ -775,6 +744,7 @@
             const inputValue = String(inputField.value).trim();
 
             if (!validateTextInput(inputValue)) {
+                // Diese Meldung sollte nur bei einem Logikfehler auftreten, da validateTextInput bereits bei Eingabe warnt
                 elements.feedbackMessage.textContent = 'Fehler: Ungültige Eingabe.';
                 elements.feedbackMessage.className = 'text-lg font-semibold text-red-600';
                 return;
@@ -783,6 +753,7 @@
             isQuestionActive = false;
             inputField.disabled = true;
 
+            // Korrekte Antwort ist immer ein String in der JSON-Datei
             const isCorrect = inputValue === question.correctAnswer;
             
             // Visuelles Feedback auf dem Input-Feld
@@ -790,7 +761,7 @@
             inputField.classList.remove('border-gray-300', 'border-red-500', 'focus:border-cd-primary', 'focus:ring-cd-primary');
             
             // Allgemeines Feedback
-            provideFeedback(isCorrect, isCorrect ? '' : `Korrekte Antwort: ${question.correctAnswer} km/h`);
+            provideFeedback(isCorrect);
 
             checkButton.classList.add('hidden');
             elements.nextButton.classList.remove('hidden');
@@ -798,7 +769,7 @@
         };
 
 
-        const provideFeedback = (isCorrect, correctText = '') => {
+        const provideFeedback = (isCorrect) => {
             const currentQuestion = currentQuizQuestions[currentQuestionIndex];
             
             if (isCorrect) {
@@ -810,25 +781,23 @@
                 elements.feedbackMessage.textContent = 'Falsch. Die korrekte(n) Antwort(en) ist/sind markiert.';
                 elements.feedbackMessage.className = 'text-lg font-semibold text-red-600';
                 
-                // Erklärung für Falsche Antworten
-                if (currentQuestion.type === 'TEXT') {
-                     // Dynamisches Feedback für TEXT-Fragen
-                     let explanationHtml = `**Falsch.** Die korrekte Antwort lautet: ${currentQuestion.correctAnswer}`;
-                     if (currentQuestion.category === "Höchstgeschwindigkeit") { 
-                         explanationHtml = `**Falsch.** Die zulässige Höchstgeschwindigkeit beträgt: ${currentQuestion.correctAnswer} km/h.`;
-                     } else if (currentQuestion.category === "TBNR Abstand") { 
-                         explanationHtml = `**Falsch.** Die korrekte TBNR lautet: ${currentQuestion.correctAnswer}.`;
+                // Erklärung anzeigen
+                if (currentQuestion.explanation) {
+                     let explanationHtml = `**Erklärung:** ${currentQuestion.explanation}`;
+                     
+                     if (currentQuestion.type === 'TEXT') {
+                         // Füge die korrekte Antwort für TEXT-Fragen hinzu, da diese nicht visuell markiert werden
+                         let correctValue = currentQuestion.correctAnswer;
+                         if (currentQuestion.category === "Höchstgeschwindigkeit") { 
+                             correctValue += " km/h";
+                         } else if (currentQuestion.category === "TBNR Abstand") { 
+                             correctValue += " (TBNR)";
+                         }
+                         explanationHtml = `**Falsch.** Die korrekte Antwort lautet: ${correctValue}<br>${explanationHtml}`;
                      }
                      
-                     if (currentQuestion.explanation) {
-                         // Fügt den wortwörtlichen Hinweis des Nutzers hinzu
-                         explanationHtml += `<br>**Hinweis:** ${currentQuestion.explanation}`;
-                     }
                      elements.explanationText.innerHTML = explanationHtml;
                      elements.explanationText.classList.remove('hidden');
-                } else if (currentQuestion.explanation) {
-                    elements.explanationText.innerHTML = `**Erklärung:** ${currentQuestion.explanation}`;
-                    elements.explanationText.classList.remove('hidden');
                 }
             }
         };
@@ -843,8 +812,6 @@
             
             elements.finalScore.textContent = currentScore;
             elements.totalQuestions.textContent = currentQuizQuestions.length;
-            
-            // Highscore-Speicherlogik entfernt
         };
         
         // --- Event Listener ---
@@ -857,7 +824,7 @@
 
         // --- Start der App ---
         // Die App startet direkt mit dem Laden der lokalen Fragen
-        loadQuestions();
+        window.onload = loadQuestions;
 
     </script>
 </body>
