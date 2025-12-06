@@ -205,7 +205,7 @@
                     "category": "§ 5 StVO - Überholen",
                     "type": "MC",
                     "text": "Wie groß muss der seitliche Abstand während des Überholvorgangs eines Pkw gegenüber einem Radfahrer a.g.O. sein?",
-                    "image": "./SEBU_192.png",
+                    "image": "https://raw.githubusercontent.com/SEBUVerlag/LernApp/main/SEBU_512.png",
                     "options": [
                         "so groß, dass der Radfahrer nicht gefährdet wird",
                         "1,5 m",
@@ -648,19 +648,19 @@
             elements.explanationText.innerHTML = '';
 
             //NEUER PROGRAMMTEIL FÜR BILDER
-//            elements.questionImageContainer.innerHTML = ''; // Container leeren
-//                if (question.image) {
-//                    const img = document.createElement('img');
-//                    img.src = question.image;
-//                    img.alt = 'Fragenbild';
-//                    img.className = 'question-image';
-//                    img.onerror = () => {
-//                        // Falls Bild nicht geladen werden kann, ausblenden
-//                        img.style.display = 'none';
-//                        console.error('Bild konnte nicht geladen werden:', question.image);
-//                    };
-//                    elements.questionImageContainer.appendChild(img);
-//                }
+            elements.questionImageContainer.innerHTML = ''; // Container leeren
+                if (question.image) {
+                    const img = document.createElement('img');
+                    img.src = question.image;
+                    img.alt = 'Fragenbild';
+                    img.className = 'question-image';
+                    img.onerror = () => {
+                        // Falls Bild nicht geladen werden kann, ausblenden
+                        img.style.display = 'none';
+                        console.error('Bild konnte nicht geladen werden:', question.image);
+                    };
+                    elements.questionImageContainer.appendChild(img);
+                }
 
             const checkButtonId = 'check-answer-button';
             let checkButton = document.getElementById(checkButtonId);
