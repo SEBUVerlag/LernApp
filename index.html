@@ -155,7 +155,7 @@
             categoryContainer: document.getElementById('category-container'),
             quizArea: document.getElementById('quiz-area'),
             questionText: document.getElementById('question-text'),
-            questionImageContainer: document.getElementById('question-image-container'), //NEU EINGEFÜGT FÜR BILDER
+            questionImageContainer: document.getElementById('question-image-container'), // NEU EINGEFÜGT FÜR BILDER
             explanationText: document.getElementById('explanation-text'),
             optionsContainer: document.getElementById('options-container'),
             feedbackMessage: document.getElementById('feedback-message'),
@@ -649,7 +649,7 @@
             elements.explanationText.classList.add('hidden');
             elements.explanationText.innerHTML = '';
 
-            //NEUER PROGRAMMTEIL FÜR BILDER
+            // NEUER PROGRAMMTEIL FÜR BILDER
             elements.questionImageContainer.innerHTML = ''; // Container leeren
                 if (question.image) {
                     const img = document.createElement('img');
